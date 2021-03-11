@@ -1,4 +1,4 @@
-package com.br.smallmanager.apismallManager.dto;
+package com.br.smallmanager.apismallManager.entity;
 
 import java.util.Date;
 
@@ -28,7 +28,7 @@ public class Usuario {
 	@Id
 	@Column(name = "id_usuario")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	 
-	private Integer id_usuario;
+	private Long id_usuario;
 	@Column(name = "nome")
 	private String nome; 
 	@Column(name = "sobrenome")
