@@ -58,7 +58,7 @@ public class UsuarioService {
 	public Usuario updateUsuario(Usuario usuario) {
 		
 		Objects.requireNonNull(usuario.getId());
-		validarEmail(usuario.getEmail());
+	 
 		return	repository.save(usuario);
 	  
 	}

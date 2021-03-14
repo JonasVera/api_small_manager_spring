@@ -14,17 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsuarioEditDTO {
 	 
-	private Long id;	 
+	private String id;	 
 	private String nome; 	 
 	private String sobrenome;	 
-	private Date data_nascimento;	 
+	private String data_nascimento;	 
 	private String sexo;	 
 	private String bio;	 
 	private String contato_pessoal; 	 
 	private String img_login;  
-	private String  email;	 
-	private boolean confirma_email;	 
-	private Date data_cadastro; 	 
+	private String  email;	  
 	private String senha;
 	  
 }

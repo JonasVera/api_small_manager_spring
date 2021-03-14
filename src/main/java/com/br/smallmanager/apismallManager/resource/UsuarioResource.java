@@ -1,18 +1,13 @@
 package com.br.smallmanager.apismallManager.resource;
 
 import java.io.Serializable;
-import java.net.URI;
+ 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.List; 
 
-import javax.mail.MessagingException;
-import javax.persistence.PostUpdate;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,20 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.RequestMapping; 
+import org.springframework.web.bind.annotation.RestController; 
 
 import com.br.smallmanager.apismallManager.dto.UsuarioEditDTO;
 import com.br.smallmanager.apismallManager.dto.UsuarioStartDTO;
 import com.br.smallmanager.apismallManager.entity.*;
-import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
-import com.br.smallmanager.apismallManager.repository.UsuarioRepository;
+import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException; 
 import com.br.smallmanager.apismallManager.service.UsuarioService;
-import com.br.smallmanager.apismallManager.utils.EmailSenderService;
  
-
+  
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioResource implements Serializable{
@@ -64,33 +55,44 @@ public class UsuarioResource implements Serializable{
 		}
 	}
 	
-	@SuppressWarnings("unused")
+
 	@PutMapping
 	public ResponseEntity<?> updateUsuario ( @RequestBody UsuarioEditDTO usuarioEdit) {
 		
-		return service.obterPorId(usuarioEdit.getId()).map(
+		return service.obterPorId(Long.parseLong(usuarioEdit.getId())).map(
 				  entity ->{
 					try {
-				 
-						 
-						  if(usuarioEdit == null)
-							  return ResponseEntity.badRequest().body("Não foi possivel atualizar o status do lançamento.");
+						
+						SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
+						
+						
+						  if(usuarioEdit == null) {
+							return ResponseEntity.badRequest().body("Não foi possivel atualizar o status do lançamento.");
+						}
+						  Date data = formato.parse(usuarioEdit.getData_nascimento());
+						  		
 						  Usuario usuario = Usuario.builder()
-									.nome(usuarioEdit.getNome())
-									.email(usuarioEdit.getEmail())
+									
+								  	.nome(usuarioEdit.getNome())
+									.id(Long.parseLong(usuarioEdit.getId()))
+								  	.email(usuarioEdit.getEmail())
 									.sobrenome(usuarioEdit.getSobrenome())
 									.sexo(usuarioEdit.getSexo())
 									.bio(usuarioEdit.getBio())
 									.contato_pessoal(usuarioEdit.getContato_pessoal())
 									.email(usuarioEdit.getEmail())
 									.senha(usuarioEdit.getSenha())
-									.data_atualizacao(new Date())
+									.data_nascimento(data)
+									.codigo_confirmacao(entity.getCodigo_confirmacao())
+									.status_perfil(entity.isStatus_perfil())
 									.build();
 						  
-						  service.updateUsuario(entity);
+						  entity = usuario;
+						  
+						  service.updateUsuario(usuario);
 						  
 						  return ResponseEntity.ok(entity);
-					} catch (RegraNegocioException e) {
+					} catch (RegraNegocioException | ParseException e) {
 						return ResponseEntity.badRequest().body(e.getMessage());
 					} 
 			 
