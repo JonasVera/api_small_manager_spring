@@ -25,9 +25,9 @@ public class ContatoService {
 	private EmpresaService empresaService;
 
 	@Transactional 
-	public Contato cadastrarContato(Empresa empresa,Contato contato) {
+	public Contato cadastrarContato(Contato contato) {
 		
-		Optional<Empresa> empresaExistente = empresaService.obterPorId(empresa.getId());
+		Optional<Empresa> empresaExistente = empresaService.obterPorId(contato.getEmpresa().getId());
 		
 		if (!empresaExistente.isEmpty()) {
 			contato.setEmpresa(empresaExistente.get() );
@@ -35,8 +35,7 @@ public class ContatoService {
 				
 		}else {
 			throw new RegraNegocioException("Não foi possivel cadastrar um contado, empresa não encontrada.");
-		}
-		 
+		} 
 	}
 	
 	@Transactional 
