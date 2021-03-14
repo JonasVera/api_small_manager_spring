@@ -1,35 +1,17 @@
 package com.br.smallmanager.apismallManager.service;
-
-import java.util.Arrays;
+ 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
-
 import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.br.smallmanager.apismallManager.entity.Usuario;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
 import com.br.smallmanager.apismallManager.repository.UsuarioRepository;
-import com.br.smallmanager.apismallManager.utils.Email;
 import com.br.smallmanager.apismallManager.utils.EmailSenderService;
-import com.br.smallmanager.apismallManager.utils.Mailer;
-import com.br.smallmanager.apismallManager.utils.Mensagem;
-
-import ch.qos.logback.classic.Logger;
-
+ 
 @Service
 public class UsuarioService {
 

@@ -5,8 +5,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List; 
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping; 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController; 
 
 import com.br.smallmanager.apismallManager.dto.UsuarioEditDTO;
@@ -54,21 +53,19 @@ public class UsuarioResource implements Serializable{
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
-
+	 
 	@PutMapping
 	public ResponseEntity<?> updateUsuario ( @RequestBody UsuarioEditDTO usuarioEdit) {
-		
+		 if(usuarioEdit == null) 
+				return ResponseEntity.badRequest().body("Não foi possivel atualizar o status do lançamento.");
+		else
+			 
 		return service.obterPorId(Long.parseLong(usuarioEdit.getId())).map(
 				  entity ->{
 					try {
 						
 						SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
-						
-						
-						  if(usuarioEdit == null) {
-							return ResponseEntity.badRequest().body("Não foi possivel atualizar o status do lançamento.");
-						}
+						 
 						  Date data = formato.parse(usuarioEdit.getData_nascimento());
 						  		
 						  Usuario usuario = Usuario.builder()
@@ -99,7 +96,7 @@ public class UsuarioResource implements Serializable{
 				}).orElseGet(() 
 				-> new ResponseEntity<String>("Usuario não encontrado.",HttpStatus.BAD_REQUEST));
 			 
-	}
+	} 
 	
 	@PostMapping("Ativar/{email}/{codigo}")
 	public ResponseEntity<?> atvivarConta (@PathVariable("email") String email,@PathVariable("codigo") String codigo) {

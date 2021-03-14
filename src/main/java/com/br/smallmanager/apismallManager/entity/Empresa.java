@@ -1,9 +1,7 @@
 package com.br.smallmanager.apismallManager.entity;
 
 import java.time.LocalDate;  
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -14,8 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,5 +61,6 @@ public class Empresa {
 	private  LocalDate data_atualizacao;
 	
      @OneToMany(mappedBy = "empresa")
-	 private List<Contato> contatos = new ArrayList<Contato>();
+     @JsonIgnore 
+	 private List<Contato> contatos;
 }

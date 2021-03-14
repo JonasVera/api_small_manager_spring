@@ -1,4 +1,4 @@
-package com.br.smallmanager.apismallManager.entity;
+package com.br.smallmanager.apismallManager.dto;
  
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,5 +1,9 @@
 package com.br.smallmanager.apismallManager.repository;
 
-public class ContatoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.br.smallmanager.apismallManager.entity.Contato;
+
+public interface ContatoRepository extends JpaRepository<Contato, Long> {
 
 }
