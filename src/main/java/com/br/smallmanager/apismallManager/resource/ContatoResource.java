@@ -1,5 +1,11 @@
 package com.br.smallmanager.apismallManager.resource;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/contato")
 public class ContatoResource {
 
+	
 }
