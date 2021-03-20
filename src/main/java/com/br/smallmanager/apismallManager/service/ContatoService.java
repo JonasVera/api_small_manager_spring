@@ -6,9 +6,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import com.br.smallmanager.apismallManager.entity.Contato;
@@ -52,22 +49,23 @@ public class ContatoService {
 	public Optional<Contato> obterPorId(Long id) {
 		return repository.findById(id);
 	}
-	@Transactional 
-	public List<Contato> buscarContatoEmpresa(Contato contatoFiltro) {
-		Example<Contato> example = Example.of(contatoFiltro, ExampleMatcher.matching()
-				.withIgnoreCase()
-				.withStringMatcher(StringMatcher.CONTAINING));
-		 
-		return repository.findAll(example);
-	}
 	
 	@Transactional 
-	public void excluirEmpresa(Contato contato) {
-		  repository.delete(contato);
-	 }
-		
+	public List<Contato> buscarContatoEmpresa(Empresa empresa) {
+		  
+		return repository.findByEmpresa(empresa);  
+	}
+	 
 	@Transactional 
 	public void alterarEmpresa(Contato contato) {
 		repository.save(contato);
 	}
+
+	public void excluirContato(Contato contato) {
+		empresaService.validaEmpresa(contato.getEmpresa());
+	    repository.delete(contato);
+		
+	}
+	
+ 
 }

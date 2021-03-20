@@ -75,4 +75,10 @@ public class EmpresaService {
 	  repository.delete(empresa);
 	}
 	
+	public void validaEmpresa(Empresa empresa) {
+		 
+		if (repository.findById(empresa.getId()).isPresent() == false) {
+			throw new RegraNegocioException("Empresa não existe !");
+		}
+	}
 }

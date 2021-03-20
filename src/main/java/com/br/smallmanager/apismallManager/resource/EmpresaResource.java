@@ -56,7 +56,7 @@ public class EmpresaResource {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updatEmpresa ( @RequestBody EmpresaDTO dto) {
+	public ResponseEntity<?> updateEmpresa ( @RequestBody EmpresaDTO dto) {
 		 if(dto == null) 
 				return ResponseEntity.badRequest().body("Não foi possivel atualizar a empresa");
 		else
@@ -133,8 +133,7 @@ public class EmpresaResource {
 		 	 empFiltro.setUsuario(user.get());
 		 	
 		 Optional<Empresa> empresa = service.buscarPorId(empFiltro);
-		 
-		 
+		  
 		return ResponseEntity.ok(empresa.get());
 		
 	}
