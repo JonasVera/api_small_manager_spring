@@ -11,10 +11,11 @@ import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
  
 @Data
-@Builder
 @EqualsAndHashCode
+@NoArgsConstructor
 @Entity
 @Table(name = "fotos", schema = "api_smallmanager")
 public class Fotos {
@@ -29,8 +30,7 @@ public class Fotos {
 	private String caminho;
 	@Column(name = "tamanho")
 	private String tamanho;
-	@Column(name = "usuario")
-	private Usuario usuario;
+	 
 	@Column(name = "contexto")
 	private String contexto;
 	 

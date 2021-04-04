@@ -46,7 +46,5 @@ public class Contato {
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
-	
-	
-	  
+	 
 }

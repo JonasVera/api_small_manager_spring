@@ -43,9 +43,7 @@ public class UsuarioService {
 	 
 		return	repository.save(usuario);
 	  
-	}
-	
-	
+	} 
 	public List<Usuario> listUsuarios (){
 		return repository.findAll();
 	}

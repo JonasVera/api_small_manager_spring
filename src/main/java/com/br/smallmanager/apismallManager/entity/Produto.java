@@ -42,11 +42,7 @@ public class Produto {
 	
 	@Column(name = "descricao")
 	private String descricao;
-	
-	@OneToMany
-	@JoinColumn(name = "foto_id")
-	private List<Fotos> fotos;
-	
+	 
 	@Column(name = "estoque_maximo")
 	private BigDecimal estoque_maximo;
 	
