@@ -57,13 +57,13 @@ public class Usuario {
 	private String img_login;
 	
 	@Column(name = "status_perfil")
-	private boolean status_perfil;
+	private Boolean status_perfil;
 	
 	@Column(name = "email")
 	private String  email;
 	
 	@Column(name = "confirma_email")
-	private boolean confirma_email;
+	private Boolean confirma_email;
 	
 	@Column(name = "data_cadastro")
 	private Date data_cadastro; 

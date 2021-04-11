@@ -22,5 +22,6 @@ public class UsuarioEditDTO {
 	private String img_login;  
 	private String  email;	  
 	private String senha;
+	private boolean statusPerfil;
 	  
 }

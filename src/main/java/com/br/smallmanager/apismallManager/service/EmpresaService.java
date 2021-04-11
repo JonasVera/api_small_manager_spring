@@ -31,15 +31,13 @@ public class EmpresaService {
 		Optional<Usuario> user = userService.obterPorId(usuario.getId());
 		
 		if (!user.isEmpty()) {
-			empresa.setUsuario(usuario);
+				empresa.setUsuario(usuario);
 				return repository.save(empresa);
 		}else {
 			throw new RegraNegocioException("Não foi possivel cadastrar empresa, usuario não encontrado.");
-		}
-		 
+		} 
 	}
-	
-	 
+	  
 	@Transactional 
 	public List<Empresa> buscar(Empresa empresaFiltro) {
 		Example<Empresa> example = Example.of(empresaFiltro, ExampleMatcher.matching()
@@ -69,6 +67,18 @@ public class EmpresaService {
 	@Transactional 
 	public Optional<Empresa> obterPorId(Long id) {
 		return repository.findById(id);
+	}
+	
+	public void uploadFotoLogo(Empresa empresa){
+	 	Empresa userUp = new Empresa(); 
+	
+		if (obterPorId(empresa.getId()).isPresent()) {
+			userUp = obterPorId(empresa.getId()).get();
+			userUp.setImg_logotipo(empresa.getImg_logotipo()); 
+			repository.save(userUp);
+		}else
+			throw new RegraNegocioException("Empresa não encontrado.");
+		
 	}
 	
 	public void excluirEmpresa(Empresa empresa) {

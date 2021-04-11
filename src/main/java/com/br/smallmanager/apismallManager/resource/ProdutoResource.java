@@ -18,30 +18,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.br.smallmanager.apismallManager.dto.EmpresaDTO; 
+import com.br.smallmanager.apismallManager.dto.ProdutoDTO; 
+import com.br.smallmanager.apismallManager.entity.Produto;
 import com.br.smallmanager.apismallManager.entity.Empresa;
-import com.br.smallmanager.apismallManager.entity.Usuario;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
+import com.br.smallmanager.apismallManager.service.ProdutoService;
 import com.br.smallmanager.apismallManager.service.EmpresaService;
-import com.br.smallmanager.apismallManager.service.UsuarioService;
 import com.br.smallmanager.apismallManager.utils.FotoUploadDisco;
 
 @RestController
 @RequestMapping("api/empresa")
-public class EmpresaResource {
+public class ProdutoResource {
 
 	@Autowired
-	private EmpresaService service;
+	private ProdutoService service;
 	@Autowired
-	private UsuarioService userService;
+	private EmpresaService userService;
 	 
 	@PostMapping
-	public ResponseEntity<?> cadastrarEmpresa ( @RequestBody EmpresaDTO dto) {
+	public ResponseEntity<?> cadastrarProduto ( @RequestBody ProdutoDTO dto) {
 		
-		Usuario usuario = new Usuario ();
-		usuario.setId(dto.getUsuario());
+		Empresa e = new Empresa ();
+		usuario.setId(dto.getEmpresa());
 		
-		Empresa empresa = Empresa.builder()
+		Produto empresa = Produto.builder()
 				.nome(dto.getNome())
 				.categoria(dto.getCategoria())
 				.cnpj(dto.getCnpj())
@@ -53,15 +53,15 @@ public class EmpresaResource {
 				.agendamento_cli(dto.getAgendamento_cli())
 				.build();
 		try {
-			Empresa empresaSalva = service.cadastrarEmpresa(empresa,usuario);
-			return new ResponseEntity<Empresa>(empresaSalva, HttpStatus.CREATED);
+			Produto empresaSalva = service.cadastrarProduto(empresa,usuario);
+			return new ResponseEntity<Produto>(empresaSalva, HttpStatus.CREATED);
 		}catch (RegraNegocioException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updateEmpresa ( @RequestBody EmpresaDTO dto) {
+	public ResponseEntity<?> updateProduto ( @RequestBody ProdutoDTO dto) {
 		 if(dto == null) 
 				return ResponseEntity.badRequest().body("Não foi possivel atualizar a empresa");
 		else {
@@ -69,11 +69,11 @@ public class EmpresaResource {
 			return service.obterPorId(dto.getId()).map(
 					  entity ->{
 						try {
-							 Usuario usuario = new Usuario ();
-							 usuario.setId(dto.getUsuario());
+							 Empresa usuario = new Empresa ();
+							 usuario.setId(dto.getEmpresa());
 							  
 							 if (userService.obterPorId(usuario.getId()).isPresent()) {
-									Empresa empresa = Empresa.builder()
+									Produto empresa = Produto.builder()
 											
 										  	.nome(dto.getNome())
 											.categoria(dto.getCategoria())
@@ -89,7 +89,7 @@ public class EmpresaResource {
 								  
 								  entity = empresa;
 								  
-								  service.alterarEmpresa(empresa);
+								  service.alterarProduto(empresa);
 							 }else {
 								 return new ResponseEntity<String>("Usuário não entrado.",HttpStatus.BAD_REQUEST);
 							 } 
@@ -99,14 +99,14 @@ public class EmpresaResource {
 						} 
 				 
 					}).orElseGet(() 
-					-> new ResponseEntity<String>("Empresa não encontrado.",HttpStatus.BAD_REQUEST));
+					-> new ResponseEntity<String>("Produto não encontrado.",HttpStatus.BAD_REQUEST));
 		}
 			  
 	}
 	
 	
-	@DeleteMapping("/excluirEmpresa")
-	public ResponseEntity<?>  deleteEmpresa ( @RequestBody EmpresaDTO dto) {
+	@DeleteMapping("/excluirProduto")
+	public ResponseEntity<?>  deleteProduto ( @RequestBody ProdutoDTO dto) {
 		 
 		  if(dto == null){
 				return ResponseEntity.badRequest().body("Não foi possivel localizar empresa");
@@ -115,13 +115,13 @@ public class EmpresaResource {
 				return service.obterPorId(dto.getId()).map(
 						  entity ->{
 							try { 
-								  Empresa empresa = Empresa.builder()
+								  Produto empresa = Produto.builder()
 											.id(dto.getId())
 											.build();  
 											 
 								  entity = empresa;
 								  
-								  service.excluirEmpresa(empresa);
+								  service.excluirProduto(empresa);
 								  
 								  return new ResponseEntity<>(HttpStatus.OK);
 							} catch (RegraNegocioException e) {
@@ -129,7 +129,7 @@ public class EmpresaResource {
 							} 
 					 
 						}).orElseGet(() 
-						-> new ResponseEntity<String>("Usuario não encontrado.",HttpStatus.BAD_REQUEST));
+						-> new ResponseEntity<String>("Empresa não encontrado.",HttpStatus.BAD_REQUEST));
 			}  		 
 	}
 	
@@ -139,68 +139,49 @@ public class EmpresaResource {
 								 @RequestParam(value = "categoria" ,required = false) String categoria,
 			 					 @RequestParam(value = "nome",required = false) String nome,
 			 					 @RequestParam(value = "cnpj",required = false) String cnpj,
-			 					 @RequestParam( "usuario") Long idUsuario
+			 					 @RequestParam( "usuario") Long idEmpresa
 			 					 
 				) {
 		
 		
-		Empresa empresaFiltro = new Empresa();
+		Produto empresaFiltro = new Produto();
 		empresaFiltro.setCategoria(categoria);
 		empresaFiltro.setNome(nome);
 		empresaFiltro.setCnpj(cnpj);
 		  
-		 Optional<Usuario> user = userService.obterPorId(idUsuario);
+		 Optional<Empresa> user = userService.obterPorId(idEmpresa);
 		 
 		 if(!user.isPresent())
 			 return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta. Usuário não encontrado.");
 		 else
-			 empresaFiltro.setUsuario(user.get());
+			 empresaFiltro.setEmpresa(user.get());
 		 	
-		 List<Empresa> lancamentos = service.buscar(empresaFiltro);
+		 List<Produto> lancamentos = service.buscar(empresaFiltro);
 		 
 		 
 		return ResponseEntity.ok(lancamentos);
 		
 	}
  
-	@GetMapping("/buscar/{id_usuario}/{id_empresa}")
-	public ResponseEntity<?> buscar( @PathVariable( "id_usuario") Long idUsuario, @PathVariable( "id_empresa") Long idEmpresa) {
+	@GetMapping("/buscar/{id_produto}/{id_empresa}")
+	public ResponseEntity<?> buscar( @PathVariable( "id_produto") Long idProduto, @PathVariable( "id_empresa") Long idEmpresa) {
 		
-		 Empresa empFiltro = new Empresa();
+		 Produto empFiltro = new Produto();
 		 
-		 Optional<Usuario> user = userService.obterPorId(idUsuario);
+		 Optional<Empresa> user = userService.obterPorId(idEmpresa);
 		  
 		 if(!user.isPresent())
-			 return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta. Usuário não encontrado.");
+			 return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta. Empresa não encontrada.");
 		 else
-			 empFiltro.setId(idEmpresa);
-		 	 empFiltro.setUsuario(user.get());
+			 empFiltro.setId(idProduto);
+		 	 empFiltro.setEmpresa(user.get());
 		 	
-		 Optional<Empresa> empresa = service.buscarPorId(empFiltro);
+		 Optional<Produto> empresa = service.buscarPorId(empFiltro);
 		  
 		return ResponseEntity.ok(empresa.get());
 		
 	}
 	
-	@PostMapping("/uploadLogoTipo/{id_empresa}")
-	public ResponseEntity<?> uploadFotoPerfilEmpresa(@PathVariable("id_empresa") Long id_empresa,@RequestParam MultipartFile file){
-		 FotoUploadDisco uploadDisco = new FotoUploadDisco();
-		 
-		 Empresa userUpload = new Empresa();
-		 userUpload.setId(id_empresa);
-		  //RENOMEAR IMAGEM  
-	 	 if(service.obterPorId(userUpload.getId()).isPresent()) {
-	 		 userUpload.setImg_logotipo(file.getOriginalFilename());
-		 	 uploadDisco.salvarFoto(file);
-		 	 service.uploadFotoLogo(userUpload);
-	 	 }else
-	 		return  new ResponseEntity<String>("Empresa não encontrada.",HttpStatus.BAD_REQUEST);
-	 	
-		try {
-			return new ResponseEntity<Empresa>(userUpload, HttpStatus.CREATED);
-		}catch (RegraNegocioException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
+	 
 	 
 }

@@ -1,5 +1,10 @@
 package com.br.smallmanager.apismallManager.service;
  
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,10 +42,23 @@ public class UsuarioService {
 	  
 	}
 	
+	public void uploadFotoPerfil(Usuario user){
+	 	Usuario userUp = new Usuario(); 
+	
+		if (obterPorId(user.getId()).isPresent()) {
+			userUp = obterPorId(user.getId()).get();
+			userUp.setImg_login(user.getImg_login()); 
+			repository.save(userUp);
+		}else
+			throw new RegraNegocioException("Usuário não encontrado.");
+		
+	}
+	
 	public Usuario updateUsuario(Usuario usuario) {
 		
 		Objects.requireNonNull(usuario.getId());
-	 
+				usuario.setStatus_perfil(true);
+				
 		return	repository.save(usuario);
 	  
 	} 
@@ -71,7 +89,11 @@ public class UsuarioService {
 		return existe;
 				
 	}
-	
+	public void excluirPerfil(Usuario usuario) {
+		Objects.requireNonNull(usuario.getId());
+		repository.delete(usuario);
+		
+	}
 	public Usuario ativarConta(String email, String codigoConfirmacao) {
 		
 		 Usuario user = repository.findByEmail(email);
@@ -87,11 +109,61 @@ public class UsuarioService {
 		 }
 		 return user;
 	}
-	
+	 
 	private void triggerMail(Usuario usuario) throws MessagingException {
 
 		serviceMail.sendSimpleEmail(usuario.getEmail(),
 				"Informe o codigo a seguir para ativar sua conta: "+usuario.getCodigo_confirmacao()+" ",
 				"Código de ativação da sua conta" );
+	}
+	
+	public void recuperarSenha(Usuario usuario) {
+		Objects.requireNonNull(usuario.getId());
+		Usuario usuarioCadastrado = repository.findByEmail(usuario.getEmail());
+		usuarioCadastrado.setSenha(usuario.getSenha());
+		
+		repository.save(usuarioCadastrado);		
+	}
+	
+	public  String encriptar (String texto) {
+		 
+		try {
+			Date data = new Date();
+			SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy"); 
+  
+			formatador.format( data );
+			
+			texto = texto + formatador.format(data).toString();
+			
+			MessageDigest md = null;
+			
+			md = MessageDigest.getInstance("MD5");
+			
+			BigInteger hash = new BigInteger(1,md.digest(texto.getBytes()));
+			
+			texto =  hash.toString(16);
+			
+		} catch (NoSuchAlgorithmException e) {
+			 e.printStackTrace();
+		}
+	
+		System.out.println("\nPRINT = "+texto);
+		return texto;
+	}
+	
+	public void enviarEmailRecupercaoSenha(Usuario user) throws NoSuchAlgorithmException {
+		Usuario usuarioEmail = repository.findByEmail(user.getEmail());
+		
+		String textoId = encriptar(usuarioEmail.getId().toString());
+		
+		  serviceMail.sendSimpleEmail(user.getEmail(),
+			 	 "Acesse o link para recuperar sua senha\nLink: https://localhost/api/usuario/"+textoId+"/"+usuarioEmail.getEmail(),
+		 	 "Recuperação de senha" );
+	}
+	 	
+	public Usuario findByEmail(String email) {
+		 
+		return repository.findByEmail(email);
+				
 	}
 }

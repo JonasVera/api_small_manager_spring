@@ -60,6 +60,13 @@ public class Empresa {
 	@Column(name = "data_atualizacao")
 	private  LocalDate data_atualizacao;
 	
+	@Column(name = "agendamento_cli")
+	private Boolean agendamento_cli;
+	
+	@Column(name = "orcamento_cli")
+	private Boolean orcamento_cli;
+	
+	
      @OneToMany(mappedBy = "empresa")
      @JsonIgnore 
 	 private List<Contato> contatos;

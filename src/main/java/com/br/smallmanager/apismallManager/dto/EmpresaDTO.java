@@ -16,9 +16,9 @@ import lombok.ToString;
 public class EmpresaDTO {
 
  
-	private String id;
+	private Long id;
 	 
-	private String usuario;
+	private Long usuario;
  
 	private String categoria;
 	 
@@ -28,8 +28,12 @@ public class EmpresaDTO {
  
 	private String  bio_empresa;
 	 
-	private String  img_logotipo;
+	private Boolean  img_logotipo;
  
-	private  String status_empresa; 
+	private String status_empresa; 
     
+	private Boolean agendamento_cli;
+	
+	private Boolean orcamento_cli;
+	 
 }
