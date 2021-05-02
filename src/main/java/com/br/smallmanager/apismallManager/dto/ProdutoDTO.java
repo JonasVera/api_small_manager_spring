@@ -15,25 +15,29 @@ import lombok.ToString;
 @AllArgsConstructor
 public class ProdutoDTO {
 	 
-	private String id;
+	private Long id;
 	 
+	private Double preco_venda;
+	
+	private Double preco_compra;
+ 
 	private String nome;
 	 
-	private String categoria;
+	private Long categoria;
 	 
-	private String empresa;
+	private Long empresa;
 	 
 	private String descricao; 
 	 
-	private String estoque_maximo;
+	private Double estoque_maximo;
 	 
-	private String estoque_minimo;
+	private Double estoque_minimo;
 	 
-	private String altura;
+	private Double altura;
 	 
-	private String peso;
+	private Double peso;
 	 
-	private String disponivel_entrega;
+	private Boolean disponivel_entrega;
 	 
 	private String status;
 }

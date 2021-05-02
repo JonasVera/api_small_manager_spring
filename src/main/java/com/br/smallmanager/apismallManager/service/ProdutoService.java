@@ -11,6 +11,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
+import com.br.smallmanager.apismallManager.entity.CategoriaProduto;
 import com.br.smallmanager.apismallManager.entity.Empresa;
 import com.br.smallmanager.apismallManager.entity.Produto;
 import com.br.smallmanager.apismallManager.entity.Usuario;
@@ -24,19 +25,25 @@ public class ProdutoService {
 	private ProdutoRepository repository;
 	
 	@Autowired 
-	private UsuarioService userService;
+	private EmpresaService userService;
+	
+	@Autowired 
+	private CategoriaService categoriaService;
+	
 	
 	@Transactional 
-	public Produto cadastrarProduto(Produto produto,Empresa usuario) {
+	public Produto cadastrarProduto(Produto produto) {
 		
-		Optional<Usuario> user = userService.obterPorId(usuario.getId());
-		
-		if (!user.isEmpty()) {
-				produto.setEmpresa(usuario);
-				return repository.save(produto);
-		}else {
+		Optional<Empresa> empresa = userService.obterPorId(produto.getEmpresa().getId());
+		Optional<CategoriaProduto> categoria = categoriaService.obterPorId(produto.getCategoria().getId());
+		 
+		if (empresa.isPresent() == false)
 			throw new RegraNegocioException("Não foi possivel cadastrar produto, empresa não encontrado.");
-		} 
+		else if  (categoria.isPresent() == false)
+			throw new RegraNegocioException("Não foi possivel cadastrar produto, categoria não encontrada.");
+		else 
+			return repository.save(produto);
+		 
 	}
 	  
 	@Transactional 

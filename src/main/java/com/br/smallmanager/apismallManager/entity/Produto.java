@@ -1,7 +1,7 @@
 package com.br.smallmanager.apismallManager.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.Instant; 
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import javax.persistence.Table; 
+import com.fasterxml.jackson.annotation.JsonIgnore; 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,8 +38,9 @@ public class Produto {
 	@Column(name = "nome")
 	private String nome;
 	
-	@Column(name = "categoria")
-	private String categoria;
+	@ManyToOne
+	@JoinColumn(name = "categoria_produto")
+	private CategoriaProduto categoria;
 	
 	@ManyToOne
 	@JoinColumn(name = "empresa")
@@ -62,13 +61,26 @@ public class Produto {
 	@Column(name = "peso")
 	private BigDecimal peso;
 	
+	@Column(name = "preco_venda")
+	private BigDecimal preco_venda;
+	
+	@Column(name = "preco_compra")
+	private BigDecimal preco_compra;
+	
+	
 	@Column(name = "disponivel_entrega")
 	private Boolean disponivel_entrega;
 	
 	@Column(name = "status")
 	private Boolean status;
+	
+	@Column(name = "data_cadastro")
+	private Instant data_cadastro;
+ 
+	@Column(name = "data_atualizacao")
+	private Instant data_atualizacao;
 	 
     @OneToMany(mappedBy = "produto")
     @JsonIgnore 
-	 private List<Fotos> fotos;
+	private List<Fotos> fotos;
 }

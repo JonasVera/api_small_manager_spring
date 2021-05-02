@@ -71,7 +71,7 @@ public class UsuarioService {
 		 String codigo = "";
 		 int codGerado; 
 		for (int i = 0; i <5; i++) {
-			codGerado = gerador.nextInt(100);
+			codGerado = gerador.nextInt(1000);
 		  	codigo += codigo = (Integer.toString(codGerado));
 		} 
 		return codigo.substring(5);
