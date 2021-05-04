@@ -11,6 +11,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
+import com.br.smallmanager.apismallManager.constants.Status;
 import com.br.smallmanager.apismallManager.entity.CategoriaProduto;
 import com.br.smallmanager.apismallManager.entity.Empresa;
 import com.br.smallmanager.apismallManager.entity.Produto;
@@ -35,7 +36,7 @@ public class ProdutoService {
 	public Produto cadastrarProduto(Produto produto) {
 		
 		Optional<Empresa> empresa = userService.obterPorId(produto.getEmpresa().getId());
-		Optional<CategoriaProduto> categoria = categoriaService.obterPorId(produto.getCategoria().getId());
+		Optional<CategoriaProduto> categoria = categoriaService.obterPorId(produto.getCategoriaProduto().getId());
 		 
 		if (empresa.isPresent() == false)
 			throw new RegraNegocioException("Não foi possivel cadastrar produto, empresa não encontrado.");
@@ -65,19 +66,60 @@ public class ProdutoService {
 		 } 
 	}
  
+	public List<Produto> listProdutos (){
+		return repository.findAll();
+	}
+	
+	public Produto ativarDesativar(Status status, Long idProduto) {
+		
+		Produto produtoUpdate = new Produto(); 
+		
+		if (obterPorId(idProduto).isPresent()) {
+			produtoUpdate = obterPorId(idProduto).get();
+			produtoUpdate.setData_cadastro(produtoUpdate.getData_cadastro());
+			if (produtoUpdate.getFotos() != null) {
+				produtoUpdate.setFotos(produtoUpdate.getFotos());
+			}
+			
+			produtoUpdate.setId(produtoUpdate.getId());
+			produtoUpdate.setStatus(status.toString());
+			return repository.save(produtoUpdate);
+		}else
+			throw new RegraNegocioException("Produto não encontrado.");
+		  
+	}
+	
 	public void alterarProduto(Produto produto) {
-		repository.save(produto);
+		Produto produtoUpdate = new Produto(); 
+		
+		if (obterPorId(produto.getId()).isPresent()) {
+			produtoUpdate = obterPorId(produto.getId()).get();
+			produto.setData_cadastro(produtoUpdate.getData_cadastro());
+			if (produtoUpdate.getFotos() != null) {
+				produto.setFotos(produtoUpdate.getFotos());
+			}
+			
+			produtoUpdate.setId(produtoUpdate.getId());
+			repository.save(produto);
+		}else
+			throw new RegraNegocioException("Produto não encontrado.");
+		  
 	}
-	@Transactional 
-	public void listarEmrpesa() {
-		repository.findAll();
-	}
+	 
 	@Transactional 
 	public Optional<Produto> obterPorId(Long id) {
 		return repository.findById(id);
 	}
 	
-	 
+	@Transactional 
+	public List<Produto> obterPorNome(String nome) {
+		return repository.findByNome(nome);
+	}
+	
+	@Transactional 
+	public List<Produto> obterPorCategoria(CategoriaProduto categoria) {
+		return repository.findByCategoriaProduto(categoria);
+	}
 	
 	public void excluirProduto(Produto produto) {
 	  repository.delete(produto);

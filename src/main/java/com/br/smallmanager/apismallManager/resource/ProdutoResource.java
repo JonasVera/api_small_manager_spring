@@ -1,8 +1,7 @@
 package com.br.smallmanager.apismallManager.resource;
  
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
+import java.time.Instant; 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController; 
+import org.springframework.web.bind.annotation.RestController;
+
+import com.br.smallmanager.apismallManager.constants.Status;
 import com.br.smallmanager.apismallManager.dto.ProdutoDTO; 
 import com.br.smallmanager.apismallManager.entity.Produto;
+import com.br.smallmanager.apismallManager.entity.Usuario;
 import com.br.smallmanager.apismallManager.entity.CategoriaProduto;
 import com.br.smallmanager.apismallManager.entity.Empresa;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
 import com.br.smallmanager.apismallManager.service.ProdutoService;
 import com.br.smallmanager.apismallManager.service.CategoriaService;
-import com.br.smallmanager.apismallManager.utils.FotoUploadDisco;
+ 
 
 @RestController
 @RequestMapping("api/produto")
@@ -44,27 +46,36 @@ public class ProdutoResource {
 		Empresa empresa = new Empresa ();
 		empresa.setId(dto.getEmpresa());
 		
-		Produto produto = Produto.builder()
-				.nome(dto.getNome())
-				.categoria(categoria)
-				.empresa(empresa) 
-				.descricao(dto.getDescricao())		
-				.estoque_maximo(BigDecimal.valueOf(dto.getEstoque_maximo()))
-				.estoque_minimo(BigDecimal.valueOf(dto.getEstoque_minimo()))
-				.peso(BigDecimal.valueOf(dto.getPeso()))
-				.altura(BigDecimal.valueOf(dto.getAltura()))
-				.categoria(categoria)
-				.empresa(empresa)
-				.disponivel_entrega(dto.getDisponivel_entrega())
-				.data_atualizacao(Instant.now())
-				.data_cadastro(Instant.now())
-				.build();
-		try {
-			 Produto produtoSalva = service.cadastrarProduto(produto);
-			return new ResponseEntity<Produto>(produtoSalva, HttpStatus.CREATED);
-		}catch (RegraNegocioException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+		int qtdEncontrado = service.obterPorNome(dto.getNome()).size();
+		if (qtdEncontrado != 0){
+			return new ResponseEntity<String>("Produto já existe",HttpStatus.BAD_REQUEST);
+		}else {
+			Produto produto = Produto.builder()
+					.nome(dto.getNome())
+					.categoriaProduto(categoria)
+					.empresa(empresa) 
+					.descricao(dto.getDescricao())		
+					.status(Status.ATIVO.toString())
+					.estoque_maximo(BigDecimal.valueOf(dto.getEstoque_maximo()))
+					.estoque_minimo(BigDecimal.valueOf(dto.getEstoque_minimo()))
+					.peso(BigDecimal.valueOf(dto.getPeso()))
+					.altura(BigDecimal.valueOf(dto.getAltura()))
+					.categoriaProduto(categoria)                                                                     
+					.preco_compra(BigDecimal.valueOf(dto.getPreco_compra()))
+					.preco_venda(BigDecimal.valueOf(dto.getPreco_venda()))
+					.empresa(empresa)
+					.disponivel_entrega(dto.getDisponivel_entrega())
+					.data_atualizacao(Instant.now())
+					.data_cadastro(Instant.now())
+					.build();
+			try {
+				 Produto produtoSalva = service.cadastrarProduto(produto);
+				return new ResponseEntity<Produto>(produtoSalva, HttpStatus.CREATED);
+			}catch (RegraNegocioException e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+			}
 		}
+			 
 	}
 	
 	@PutMapping
@@ -82,23 +93,29 @@ public class ProdutoResource {
 								empresa.setId(dto.getCategoria());
 							 if (userService.obterPorId(categoria.getId()).isPresent()) {
 									Produto produto = Produto.builder()
-											
+											.id(dto.getId())
 											.nome(dto.getNome())
-											.categoria(categoria)
-											.empresa(empresa) 
+											.categoriaProduto(categoria)
+											.empresa(empresa)
+											.status(Status.ATIVO.toString())
 											.descricao(dto.getDescricao())		
 											.estoque_maximo(BigDecimal.valueOf(dto.getEstoque_maximo()))
 											.estoque_minimo(BigDecimal.valueOf(dto.getEstoque_minimo()))
 											.peso(BigDecimal.valueOf(dto.getPeso()))
 											.altura(BigDecimal.valueOf(dto.getAltura()))
+											.categoriaProduto(categoria)                                                                     
+											.preco_compra(BigDecimal.valueOf(dto.getPreco_compra()))
+											.preco_venda(BigDecimal.valueOf(dto.getPreco_venda()))
+											.empresa(empresa)
 											.disponivel_entrega(dto.getDisponivel_entrega())
+											.data_atualizacao(Instant.now()) 
 											.build();
 								  
 								  entity = produto;
 								  
 								  service.alterarProduto(produto);
 							 }else {
-								 return new ResponseEntity<String>("Usuário não entrado.",HttpStatus.BAD_REQUEST);
+								 return new ResponseEntity<String>("Produto não entrado.",HttpStatus.BAD_REQUEST);
 							 } 
 							  return ResponseEntity.ok(entity);
 						} catch (RegraNegocioException e ) {
@@ -111,18 +128,18 @@ public class ProdutoResource {
 			  
 	}
 
-	@DeleteMapping("/excluirProduto")
-	public ResponseEntity<?>  deleteProduto ( @RequestBody ProdutoDTO dto) {
+	@DeleteMapping("/excluir/{id_produto}")
+	public ResponseEntity<?>  deleteProduto ( @PathVariable( "id_produto") Long id_produto) {
 		 
-		  if(dto == null){
-				return ResponseEntity.badRequest().body("Não foi possivel localizar produto");
-			}
+		if(id_produto == null){
+            return ResponseEntity.badRequest().body("Não foi possivel localizar categoria");
+        }
 			else{
-				return service.obterPorId(dto.getId()).map(
+				return service.obterPorId(id_produto).map(
 						  entity ->{
 							try { 
 								  Produto produto = Produto.builder()
-											.id(dto.getId())
+											.id(id_produto)
 											.build();  
 											 
 								  entity = produto;
@@ -135,10 +152,39 @@ public class ProdutoResource {
 							} 
 					 
 						}).orElseGet(() 
-						-> new ResponseEntity<String>("Categoria não encontrado.",HttpStatus.BAD_REQUEST));
+						-> new ResponseEntity<String>("Produto não encontrado.",HttpStatus.BAD_REQUEST));
 			}  		 
 	}
 	
+	@PutMapping("/ativarDesativarProduto/{id_produto}")
+	public ResponseEntity<?>  ativarDesativaProduto ( @PathVariable( "id_produto") Long id_produto) {
+		 
+		if(id_produto == null){
+            return ResponseEntity.badRequest().body("Não foi possivel localizar o produto");
+        }
+			else{
+				return service.obterPorId(id_produto).map(
+						  entity ->{
+							try {  
+								  if (entity.getStatus().equals(Status.ATIVO.toString()))
+									  service.ativarDesativar(Status.DESATIVADO,id_produto);
+								  else
+									  service.ativarDesativar(Status.ATIVO,id_produto);
+								  
+								  return new ResponseEntity<>(HttpStatus.OK);
+							} catch (RegraNegocioException e) {
+								return ResponseEntity.badRequest().body(e.getMessage());
+							} 
+					 
+						}).orElseGet(() 
+						-> new ResponseEntity<String>("Produto não encontrado.",HttpStatus.BAD_REQUEST));
+			}  		 
+	}
+	
+	@GetMapping
+	public List<Produto> listarUsuario(){
+		return service.listProdutos();
+	}
 	
 	@GetMapping("/buscar")
 	public ResponseEntity<?> buscar(
@@ -153,7 +199,7 @@ public class ProdutoResource {
 		CategoriaProduto categoFiltro = new CategoriaProduto();
 		categoFiltro.setId(idCategoria);
 		categoFiltro.setNome(categoria);
-		produtoFiltro.setCategoria(categoFiltro);
+		produtoFiltro.setCategoriaProduto(categoFiltro);
 		produtoFiltro.setNome(nome);
  
 		 Optional<CategoriaProduto> user = userService.obterPorId(idCategoria);
@@ -161,7 +207,7 @@ public class ProdutoResource {
 		 if(!user.isPresent())
 			 return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta. Categoria não encontrada.");
 		 else
-			 produtoFiltro.setCategoria(user.get());
+			 produtoFiltro.setCategoriaProduto(user.get());
 		 	
 		 List<Produto> lancamentos = service.buscar(produtoFiltro);
 		  
@@ -169,22 +215,16 @@ public class ProdutoResource {
 		
 	}
  
-	@GetMapping("/buscar/{id_categoria}/{id_produto}")
-	public ResponseEntity<?> buscar( @PathVariable( "id_categoria") Long idCategoria, @PathVariable( "id_produto") Long idProduto) {
-		
-		 Produto empFiltro = new Produto();
-		 
-		 Optional<CategoriaProduto> user = userService.obterPorId(idCategoria);
+	@GetMapping("/produtoCategoria/{id_categoria}")
+	public ResponseEntity<?> buscar( @PathVariable( "id_categoria") Long idCategoria) {
+	  
+		 Optional<CategoriaProduto> catFiltro = userService.obterPorId(idCategoria);
 		  
-		 if(!user.isPresent())
+		 if(!catFiltro.isPresent())
 			 return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta. Categoria não encontrada.");
 		 else
-			 empFiltro.setId(idProduto);
-		 	 empFiltro.setCategoria(user.get());
-		 	
-		 Optional<Produto> produto = service.buscarPorId(empFiltro);
-		  
-		return ResponseEntity.ok(produto.get());
+		 
+		return ResponseEntity.ok(service.obterPorCategoria(catFiltro.get()));
 		
 	}
 	 

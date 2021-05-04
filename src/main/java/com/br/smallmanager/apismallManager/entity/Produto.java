@@ -11,7 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table; 
+import javax.persistence.Table;
+
+import com.br.smallmanager.apismallManager.constants.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore; 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,14 +38,9 @@ public class Produto {
 	private Long id;
 	
 	@Column(name = "nome")
-	private String nome;
-	
+	private String nome; 
 	@ManyToOne
-	@JoinColumn(name = "categoria_produto")
-	private CategoriaProduto categoria;
-	
-	@ManyToOne
-	@JoinColumn(name = "empresa")
+	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
 	
 	@Column(name = "descricao")
@@ -54,6 +51,11 @@ public class Produto {
 	
 	@Column(name = "estoque_minimo")
 	private BigDecimal estoque_minimo;
+	
+	@ManyToOne
+	@JoinColumn(name = "categoria_id")
+	private CategoriaProduto categoriaProduto;
+	
 	
 	@Column(name = "altura")
 	private BigDecimal altura;
@@ -72,7 +74,7 @@ public class Produto {
 	private Boolean disponivel_entrega;
 	
 	@Column(name = "status")
-	private Boolean status;
+	private String status;
 	
 	@Column(name = "data_cadastro")
 	private Instant data_cadastro;
