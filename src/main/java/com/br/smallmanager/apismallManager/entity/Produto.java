@@ -39,6 +39,7 @@ public class Produto {
 	
 	@Column(name = "nome")
 	private String nome; 
+	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
 	private Empresa empresa;
