@@ -46,8 +46,11 @@ public class UsuarioService {
 	 	Usuario userUp = new Usuario(); 
 	
 		if (obterPorId(user.getId()).isPresent()) {
-			userUp = obterPorId(user.getId()).get();
-			userUp.setImg_login(user.getImg_login()); 
+			
+			if (userUp.getImg_login() != null || userUp.getImg_login() != "") {
+				userUp = obterPorId(user.getId()).get();
+				userUp.setImg_login(user.getImg_login()); 
+			}
 			repository.save(userUp);
 		}else
 			throw new RegraNegocioException("Usuário não encontrado.");
@@ -78,6 +81,7 @@ public class UsuarioService {
 	}
 	
 	public Optional<Usuario> obterPorId(Long id) {
+		
 		return repository.findById(id);
 	}
 	

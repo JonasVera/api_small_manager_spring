@@ -8,10 +8,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.persistence.Entity;
 
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +31,12 @@ import com.br.smallmanager.apismallManager.entity.*;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException; 
 import com.br.smallmanager.apismallManager.service.UsuarioService;
 import com.br.smallmanager.apismallManager.utils.FotoUploadDisco;
+import com.google.api.client.repackaged.com.google.common.base.Optional;
  
   
-@RestController
+@RestController 
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "*")
 public class UsuarioResource implements Serializable{
  
 	private static final long serialVersionUID = 1L;
@@ -44,6 +48,19 @@ public class UsuarioResource implements Serializable{
 		return service.listUsuarios();
 	}
 	  
+	@GetMapping
+	("UsuarioLogado/{id}")
+	public ResponseEntity<?> getUsuario(@PathVariable("id") Long id){
+		java.util.Optional<Usuario> usuario = service.obterPorId(id);
+		if	(usuario != null) {
+			
+			return new ResponseEntity<Usuario>(usuario.get(),HttpStatus.OK); 
+		}else {
+			return  new ResponseEntity<String>("Usuario não encontrado.",HttpStatus.BAD_REQUEST);
+		}
+		 
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> salvar ( @RequestBody UsuarioStartDTO dto) {
 		
@@ -51,6 +68,7 @@ public class UsuarioResource implements Serializable{
 				.nome(dto.getNome())
 				.email(dto.getEmail())
 				.senha(dto.getSenha())
+				.sobrenome(dto.getSobrenome())
 				.data_cadastro(new Date())
 				.build();
 		try {
@@ -72,8 +90,11 @@ public class UsuarioResource implements Serializable{
 					try {
 						
 						SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
-						 
-						  Date data = formato.parse(usuarioEdit.getData_nascimento());
+						 Date data = new Date();
+							if(usuarioEdit.getData_nascimento() != null) {
+								   data = formato.parse(usuarioEdit.getData_nascimento());
+							}
+						
 						  	usuarioEdit.setStatusPerfil(true);
 						  Usuario usuario = Usuario.builder()
 									
@@ -81,21 +102,16 @@ public class UsuarioResource implements Serializable{
 									.id(Long.parseLong(usuarioEdit.getId()))
 								  	.email(usuarioEdit.getEmail())
 									.sobrenome(usuarioEdit.getSobrenome())
-									.sexo(usuarioEdit.getSexo())
-									.bio(usuarioEdit.getBio())
+									.sexo(usuarioEdit.getSexo()) 
 									.contato_pessoal(usuarioEdit.getContato_pessoal())
 									.email(usuarioEdit.getEmail())
 									.senha(usuarioEdit.getSenha())
 									.data_nascimento(data)
-									 
-									.codigo_confirmacao(entity.getCodigo_confirmacao())
-									
+									.codigo_confirmacao(entity.getCodigo_confirmacao()) 
 									.build();
-						  
-						  entity = usuario;
-						  
-						  service.updateUsuario(usuario);
-						  
+						  System.out.println(usuario.getContato_pessoal());
+						  entity = usuario; 
+						  service.updateUsuario(usuario); 
 						  return ResponseEntity.ok(entity);
 					} catch (RegraNegocioException | ParseException e) {
 						return ResponseEntity.badRequest().body(e.getMessage());
@@ -106,6 +122,7 @@ public class UsuarioResource implements Serializable{
 			 
 	} 
 	@DeleteMapping("/excluirPerfil")
+
 	public ResponseEntity<?>  deleteUsuario ( @RequestBody UsuarioStartDTO dto) {
 		 
 		  if(dto == null){

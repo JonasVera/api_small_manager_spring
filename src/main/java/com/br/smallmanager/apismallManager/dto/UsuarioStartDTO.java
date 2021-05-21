@@ -19,6 +19,8 @@ public class UsuarioStartDTO {
 	private String email;
 	@NotNull
 	private String senha;
+	@NotNull
+	private String sobrenome;
 	
-	
+	private String dataNascimento;
 }
