@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+ 
 import com.br.smallmanager.apismallManager.entity.Usuario;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
 import com.br.smallmanager.apismallManager.repository.UsuarioRepository;
@@ -68,7 +69,15 @@ public class UsuarioService {
 	public List<Usuario> listUsuarios (){
 		return repository.findAll();
 	}
-	 
+	public void uploadFotoPerfilStorage(Usuario user){
+		Objects.requireNonNull(user.getId());
+		
+	 	Usuario userUp = new Usuario(); 
+		userUp = obterPorId(user.getId()).get();
+		userUp.setImg_login(user.getImg_login()); 
+		 
+		repository.save(userUp);
+	}
 	private String codigoEmail() {
 		 Random gerador = new Random();
 		 String codigo = "";

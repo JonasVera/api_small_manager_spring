@@ -58,6 +58,7 @@ public class EmpresaService {
 	}
  
 	public void alterarEmpresa(Empresa empresa) {
+		System.out.println("ALT "+empresa.getId());
 		repository.save(empresa);
 	}
 	@Transactional 

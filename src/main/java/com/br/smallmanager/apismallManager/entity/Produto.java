@@ -83,7 +83,6 @@ public class Produto {
 	@Column(name = "data_atualizacao")
 	private Instant data_atualizacao;
 	 
-    @OneToMany(mappedBy = "produto")
-    @JsonIgnore 
+	@OneToMany(mappedBy = "produto") 
 	private List<Fotos> fotos;
 }

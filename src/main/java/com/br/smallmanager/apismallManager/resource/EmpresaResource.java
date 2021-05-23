@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import com.br.smallmanager.apismallManager.utils.FotoUploadDisco;
 
 @RestController
 @RequestMapping("api/empresa")
+@CrossOrigin(origins = "*")
 public class EmpresaResource {
 
 	@Autowired
@@ -65,7 +67,7 @@ public class EmpresaResource {
 		 if(dto == null) 
 				return ResponseEntity.badRequest().body("Não foi possivel atualizar a empresa");
 		else {
-		
+			
 			return service.obterPorId(dto.getId()).map(
 					  entity ->{
 						try {
@@ -74,7 +76,7 @@ public class EmpresaResource {
 							  
 							 if (userService.obterPorId(usuario.getId()).isPresent()) {
 									Empresa empresa = Empresa.builder()
-											
+											.id(dto.getId())
 										  	.nome(dto.getNome())
 											.categoria(dto.getCategoria())
 											.cnpj(dto.getCnpj())
@@ -90,10 +92,12 @@ public class EmpresaResource {
 								  entity = empresa;
 								  
 								  service.alterarEmpresa(empresa);
+								  return   ResponseEntity.ok(entity);
+									 
 							 }else {
 								 return new ResponseEntity<String>("Usuário não entrado.",HttpStatus.BAD_REQUEST);
 							 } 
-							  return ResponseEntity.ok(entity);
+							 
 						} catch (RegraNegocioException e ) {
 							return ResponseEntity.badRequest().body(e.getMessage());
 						} 

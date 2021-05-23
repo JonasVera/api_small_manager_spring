@@ -1,7 +1,5 @@
 package com.br.smallmanager.apismallManager.entity;
 
- 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,31 +17,34 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 @Entity
-@Table(name = "contato_empresa", schema = "api_smallmanager")
- 
+@Table(name = "endereco_empresa", schema = "api_smallmanager") 
 @Data
 @Builder
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Contato {
-	
+public class EnderecoEmpresa {
 	@Id
 	@Column(name = "id")	 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "categoria")
-	private String categoria; 
+	@Column(name = "cidade")
+	private String cidade; 
 	
-	@Column(name = "nome")
-	private String nome;
+	@Column(name = "uf")
+	private String uf;
+
+	@Column(name = "logradouro")
+	private String logradouro;
 	
-	@Column(name = "contato")
-	private String contato;
+	@Column(name = "numero")
+	private String numero;
+	
+	@Column(name = "cep")
+	private String cep;
 	
 	@JsonIgnore
 	@ManyToOne

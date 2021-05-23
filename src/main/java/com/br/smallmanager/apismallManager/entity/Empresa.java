@@ -67,7 +67,10 @@ public class Empresa {
 	private Boolean orcamento_cli;
 	
 	
-     @OneToMany(mappedBy = "empresa")
-     @JsonIgnore 
+     @OneToMany(mappedBy = "empresa") 
 	 private List<Contato> contatos;
+     
+     @OneToMany(mappedBy = "empresa") 
+	 private List<EnderecoEmpresa> enderecoEmpresa;
+     
 }

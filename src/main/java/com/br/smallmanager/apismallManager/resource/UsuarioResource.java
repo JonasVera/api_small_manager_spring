@@ -23,8 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
- 
+import org.springframework.web.multipart.MultipartFile; 
 import com.br.smallmanager.apismallManager.dto.UsuarioEditDTO;
 import com.br.smallmanager.apismallManager.dto.UsuarioStartDTO;
 import com.br.smallmanager.apismallManager.entity.*;
@@ -42,7 +41,8 @@ public class UsuarioResource implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private UsuarioService service;
-	 
+	@Autowired
+	 private com.br.smallmanager.apismallManager.service.S3StorageService serviceS3;
 	@GetMapping
 	public List<Usuario> listarUsuario(){
 		return service.listUsuarios();
@@ -171,6 +171,27 @@ public class UsuarioResource implements Serializable{
 		}
 	}
 	
+	@PostMapping("/uploadFotoStorage/{id_usuario}")
+	public ResponseEntity<?> uploadFotoPerfilUsuarioStorage(@PathVariable("id_usuario") Long id_usuario,@RequestParam MultipartFile file){
+	 
+		 Usuario userUpload = new Usuario();
+		 userUpload.setId(id_usuario);
+		 userUpload = service.obterPorId(userUpload.getId()).get();
+	 	 if(userUpload != null) {
+	 		  
+	 		  
+	 		 userUpload.setImg_login(serviceS3.uploadFile(file));
+	 		  
+	 		  service.uploadFotoPerfil(userUpload);
+	 	 }else
+	 		return  new ResponseEntity<String>("Foto não encontrada.",HttpStatus.BAD_REQUEST);
+	 	
+		try {
+			return new ResponseEntity<Usuario>(userUpload, HttpStatus.CREATED);
+		}catch (RegraNegocioException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	
 	@PostMapping("Ativar/{email}/{codigo}")
 	public ResponseEntity<?> atvivarConta (@PathVariable("email") String email,@PathVariable("codigo") String codigo) {
