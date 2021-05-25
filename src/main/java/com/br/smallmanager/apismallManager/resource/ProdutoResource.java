@@ -184,8 +184,15 @@ public class ProdutoResource {
 	}
 	
 	@GetMapping
-	public List<Produto> listarUsuario(){
+	public List<Produto> produtos(){
 		return service.listProdutos();
+	}
+	
+	@GetMapping("produtosEmpresa/{id_empresa}")
+	public List<Produto> produtosEmpresa(@PathVariable( "id_empresa") Long id_empresa){
+		Empresa emp = new Empresa();
+		emp.setId(id_empresa);
+		return service.produtoEmpresa(emp);
 	}
 	
 	@GetMapping("/buscar")

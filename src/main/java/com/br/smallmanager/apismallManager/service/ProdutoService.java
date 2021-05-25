@@ -121,6 +121,13 @@ public class ProdutoService {
 		return repository.findByCategoriaProduto(categoria);
 	}
 	
+	
+
+	@Transactional 
+	public List<Produto> produtoEmpresa(Empresa empresa) {
+		return repository.findByEmpresa(empresa);
+	}
+	
 	public void excluirProduto(Produto produto) {
 	  repository.delete(produto);
 	}
