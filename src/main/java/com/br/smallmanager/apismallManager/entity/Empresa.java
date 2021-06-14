@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,9 +38,10 @@ public class Empresa {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
+	
 	@Column(name = "categoria")
 	private String categoria;
 	@Column(name = "nome")
@@ -73,4 +75,6 @@ public class Empresa {
      @OneToMany(mappedBy = "empresa") 
 	 private List<EnderecoEmpresa> enderecoEmpresa;
      
+     @OneToMany(mappedBy = "empresa") 
+	 private List<Produto> produto;
 }

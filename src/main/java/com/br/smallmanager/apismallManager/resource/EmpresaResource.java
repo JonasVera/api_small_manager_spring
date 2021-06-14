@@ -36,12 +36,14 @@ public class EmpresaResource {
 	private EmpresaService service;
 	@Autowired
 	private UsuarioService userService;
-	 
+	@Autowired
+	 private com.br.smallmanager.apismallManager.service.S3StorageService serviceS3;
 	@PostMapping
 	public ResponseEntity<?> cadastrarEmpresa ( @RequestBody EmpresaDTO dto) {
 		
 		Usuario usuario = new Usuario ();
 		usuario.setId(dto.getUsuario());
+		System.out.println(usuario.getId());
 		
 		Empresa empresa = Empresa.builder()
 				.nome(dto.getNome())
@@ -167,22 +169,16 @@ public class EmpresaResource {
 		
 	}
  
-	@GetMapping("/buscar/{id_usuario}/{id_empresa}")
-	public ResponseEntity<?> buscar( @PathVariable( "id_usuario") Long idUsuario, @PathVariable( "id_empresa") Long idEmpresa) {
-		
-		 Empresa empFiltro = new Empresa();
+	@GetMapping("/buscar/{id_usuario}")
+	public ResponseEntity<?> buscar( @PathVariable( "id_usuario") Long idUsuario) {
 		 
+	   System.out.println(idUsuario);
 		 Optional<Usuario> user = userService.obterPorId(idUsuario);
 		  
 		 if(!user.isPresent())
 			 return ResponseEntity.badRequest().body("Não foi possivel realizar a consulta. Usuário não encontrado.");
-		 else
-			 empFiltro.setId(idEmpresa);
-		 	 empFiltro.setUsuario(user.get());
-		 	
-		 Optional<Empresa> empresa = service.buscarPorId(empFiltro);
-		  
-		return ResponseEntity.ok(empresa.get());
+	  
+		return ResponseEntity.ok(service.buscarPorUsuario(user.get()));
 		
 	}
 	
@@ -193,10 +189,9 @@ public class EmpresaResource {
 		 Empresa userUpload = new Empresa();
 		 userUpload.setId(id_empresa);
 		  //RENOMEAR IMAGEM  
-	 	 if(service.obterPorId(userUpload.getId()).isPresent()) {
-	 		 userUpload.setImg_logotipo(file.getOriginalFilename());
-		 	 uploadDisco.salvarFoto(file);
-		 	 service.uploadFotoLogo(userUpload);
+	 	 if(service.obterPorId(userUpload.getId()).isPresent()) { 
+	 		userUpload.setImg_logotipo(serviceS3.uploadFile(file));
+		 	service.uploadFotoLogo(userUpload);
 	 	 }else
 	 		return  new ResponseEntity<String>("Empresa não encontrada.",HttpStatus.BAD_REQUEST);
 	 	

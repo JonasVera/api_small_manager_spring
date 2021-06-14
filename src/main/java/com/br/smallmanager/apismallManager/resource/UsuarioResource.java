@@ -7,9 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.mail.MessagingException;
-import javax.persistence.Entity;
-
+import javax.mail.MessagingException; 
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile; 
+import com.br.smallmanager.apismallManager.constants.ProfileEnum;
 import com.br.smallmanager.apismallManager.dto.UsuarioEditDTO;
 import com.br.smallmanager.apismallManager.dto.UsuarioStartDTO;
 import com.br.smallmanager.apismallManager.entity.*;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException; 
 import com.br.smallmanager.apismallManager.service.UsuarioService;
-import com.br.smallmanager.apismallManager.utils.FotoUploadDisco;
-import com.google.api.client.repackaged.com.google.common.base.Optional;
- 
+import com.br.smallmanager.apismallManager.utils.FotoUploadDisco; 
   
 @RestController 
-@RequestMapping("/api/usuarios")
+@RequestMapping("/api/usuario/")
 @CrossOrigin(origins = "*")
 public class UsuarioResource implements Serializable{
  
@@ -61,7 +58,7 @@ public class UsuarioResource implements Serializable{
 		 
 	}
 	
-	@PostMapping
+	@PostMapping("cadastrar/")
 	public ResponseEntity<?> salvar ( @RequestBody UsuarioStartDTO dto) {
 		
 		Usuario usuario = Usuario.builder()
@@ -70,16 +67,21 @@ public class UsuarioResource implements Serializable{
 				.senha(dto.getSenha())
 				.sobrenome(dto.getSobrenome())
 				.data_cadastro(new Date())
+				.status_perfil(true)
+				.tipo_usuario(ProfileEnum.ROLE_CUSTUMER.toString())
+				.contato_pessoal(dto.getContatoPessoal())
 				.build();
 		try {
+			 
 			Usuario usuarioSalvo = service.salvarUsuario(usuario);
+			
 			return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.CREATED);
 		}catch (RegraNegocioException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	 
-	@PutMapping
+	@PutMapping("update")
 	public ResponseEntity<?> updateUsuario ( @RequestBody UsuarioEditDTO usuarioEdit) {
 		 if(usuarioEdit == null) 
 				return ResponseEntity.badRequest().body("Não foi possivel atualizar o usuário.");
@@ -95,22 +97,26 @@ public class UsuarioResource implements Serializable{
 								   data = formato.parse(usuarioEdit.getData_nascimento());
 							}
 						
-						  	usuarioEdit.setStatusPerfil(true);
-						  Usuario usuario = Usuario.builder()
-									
+						  			usuarioEdit.setStatusPerfil(true);
+						  			Usuario usuario = Usuario.builder()
+						  					.tipo_usuario(ProfileEnum.ROLE_CUSTUMER.toString())
 								  	.nome(usuarioEdit.getNome())
 									.id(Long.parseLong(usuarioEdit.getId()))
 								  	.email(usuarioEdit.getEmail())
 									.sobrenome(usuarioEdit.getSobrenome())
 									.sexo(usuarioEdit.getSexo()) 
+									.data_atualizacao(new Date())
 									.contato_pessoal(usuarioEdit.getContato_pessoal())
 									.email(usuarioEdit.getEmail())
 									.senha(usuarioEdit.getSenha())
 									.data_nascimento(data)
+									.bio(usuarioEdit.getBio())
 									.codigo_confirmacao(entity.getCodigo_confirmacao()) 
 									.build();
-						  System.out.println(usuario.getContato_pessoal());
-						  entity = usuario; 
+						  		  usuario.setData_cadastro(entity.getData_cadastro());
+						  		  usuario.setImg_login(entity.getImg_login());
+						  		  entity = usuario; 
+						
 						  service.updateUsuario(usuario); 
 						  return ResponseEntity.ok(entity);
 					} catch (RegraNegocioException | ParseException e) {
@@ -177,12 +183,9 @@ public class UsuarioResource implements Serializable{
 		 Usuario userUpload = new Usuario();
 		 userUpload.setId(id_usuario);
 		 userUpload = service.obterPorId(userUpload.getId()).get();
-	 	 if(userUpload != null) {
-	 		  
-	 		  
+	 	 if(userUpload != null) { 
 	 		 userUpload.setImg_login(serviceS3.uploadFile(file));
-	 		  
-	 		  service.uploadFotoPerfil(userUpload);
+	 		 service.uploadFotoPerfil(userUpload);
 	 	 }else
 	 		return  new ResponseEntity<String>("Foto não encontrada.",HttpStatus.BAD_REQUEST);
 	 	
@@ -196,9 +199,7 @@ public class UsuarioResource implements Serializable{
 	@PostMapping("Ativar/{email}/{codigo}")
 	public ResponseEntity<?> atvivarConta (@PathVariable("email") String email,@PathVariable("codigo") String codigo) {
 			
-		Usuario userAtivado = service.ativarConta(email, codigo);
-		
-		
+		Usuario userAtivado = service.ativarConta(email, codigo); 
 		try {
 		 
 			return new ResponseEntity<Usuario>(userAtivado, HttpStatus.OK);

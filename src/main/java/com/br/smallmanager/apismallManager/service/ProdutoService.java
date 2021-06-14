@@ -70,7 +70,7 @@ public class ProdutoService {
 		return repository.findAll();
 	}
 	
-	public Produto ativarDesativar(Status status, Long idProduto) {
+	public Produto ativarDesativar(Boolean status, Long idProduto) {
 		
 		Produto produtoUpdate = new Produto(); 
 		
@@ -82,7 +82,7 @@ public class ProdutoService {
 			}
 			
 			produtoUpdate.setId(produtoUpdate.getId());
-			produtoUpdate.setStatus(status.toString());
+			produtoUpdate.setStatus(status);
 			return repository.save(produtoUpdate);
 		}else
 			throw new RegraNegocioException("Produto não encontrado.");

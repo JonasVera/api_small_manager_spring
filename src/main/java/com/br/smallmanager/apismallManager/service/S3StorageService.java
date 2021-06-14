@@ -27,11 +27,9 @@ public class S3StorageService {
 	    public String uploadFile(MultipartFile file) {
 	    	
 	    	if (file != null) {
-	    		 File fileObj = convertMultiPartFileToFile(file);
+	    		File fileObj = convertMultiPartFileToFile(file);
 	 	        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-	  
 	 	        s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj).withCannedAcl(CannedAccessControlList.PublicRead));
-	 	        
 	 	        fileObj.delete();
 	 	        return fileName;
 	    	}else {

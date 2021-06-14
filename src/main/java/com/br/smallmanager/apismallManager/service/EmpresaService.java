@@ -48,6 +48,12 @@ public class EmpresaService {
 	}
 	
 	@Transactional 
+	public List<Empresa> buscarPorUsuario(Usuario usuario) {
+		 
+		return repository.findByUsuario(usuario);
+	}
+	
+	@Transactional 
 	public Optional<Empresa> buscarPorId(Empresa empresa) {
 	 
 		 if	(empresa.getUsuario().getId() != null) {

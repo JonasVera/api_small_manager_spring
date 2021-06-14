@@ -39,5 +39,5 @@ public class ProdutoDTO {
 	 
 	private Boolean disponivel_entrega;
 	 
-	private String status;
+	private Boolean status;
 }

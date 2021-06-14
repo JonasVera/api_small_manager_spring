@@ -46,6 +46,7 @@ public class EnderecoEmpresaResource {
 				.cep(dto.getCep())
 				.logradouro(dto.getLogradouro())
 				.numero(dto.getNumero()) 
+				.bairro(dto.getBairro())
 				.build();
 		  
 		if (empresa.getId() == null)
@@ -70,6 +71,7 @@ public class EnderecoEmpresaResource {
 				.cidade(dto.getCidade()) 
 				.uf(dto.getUf())
 				.cep(dto.getCep())
+				.bairro(dto.getBairro())
 				.logradouro(dto.getLogradouro())
 				.numero(dto.getNumero()) 
 				.build();

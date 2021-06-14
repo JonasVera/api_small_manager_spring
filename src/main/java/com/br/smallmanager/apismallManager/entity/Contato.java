@@ -45,9 +45,10 @@ public class Contato {
 	@Column(name = "contato")
 	private String contato;
 	
-	@JsonIgnore
+	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
+	@JsonIgnore
 	private Empresa empresa;
 	 
 }

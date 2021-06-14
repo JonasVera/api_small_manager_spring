@@ -26,6 +26,9 @@ public class EnderecoEmpresaDTO {
 	 
 	private String cep;
 	
+	private String bairro;
+	
+	
 	private Long empresa;
 	 
 }

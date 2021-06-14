@@ -63,8 +63,7 @@ public class ContatoService {
 
 	public void excluirContato(Contato contato) {
 		empresaService.validaEmpresa(contato.getEmpresa());
-	    repository.delete(contato);
-		
+	    repository.delete(contato); 
 	}
 	
  

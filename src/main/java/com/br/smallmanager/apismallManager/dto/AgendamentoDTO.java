@@ -15,13 +15,11 @@ import lombok.ToString;
 @AllArgsConstructor
 public class AgendamentoDTO {
 	private Long id; 
-	private Long empresa; 
-	private String titulo;  
-	private String id_google; 
+	private Long produto; 
+	private String titulo;   
 	private String descricao; 
 	private String status;  
-	private String email; 
-	private String whatsapp; 
+	private String email;  
 	private String dataInicio; 
 	private String horaInicio;
 }

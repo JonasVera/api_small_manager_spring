@@ -30,14 +30,13 @@ public class FotoResource {
 	 	@PostMapping("/uploadFotoProduto/{id_produto}")
 	 	public ResponseEntity<?> uploadFoto(@RequestParam MultipartFile file, @PathVariable( "id_produto") Long id_produto){
 	 		 Fotos foto = new Fotos();
-	 		 FotoUploadDisco uploadDisco = new FotoUploadDisco();
+	 		 
 	 		  Produto prodUpload = new Produto();
 	 		  prodUpload.setId(id_produto);
 	 		  foto.setProduto(prodUpload);
 	    	  String tma = Long.toString(file.getSize());
-	    	  foto.setTamanho(tma);
-	    	  foto.setNome(file.getOriginalFilename());
-	    	  foto.setContexto("Pro");
+	    	  foto.setTamanho(tma); 
+	    	  foto.setContexto("Produto");
 	    	  foto.setNome(serviceS3.uploadFile(file)); 
 	    	  
 	    	  try {

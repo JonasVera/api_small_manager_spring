@@ -57,7 +57,7 @@ public class ProdutoResource {
 					.categoriaProduto(categoria)
 					.empresa(empresa) 
 					.descricao(dto.getDescricao())		
-					.status(Status.ATIVO.toString())
+					.status(true)
 					.estoque_maximo(BigDecimal.valueOf(dto.getEstoque_maximo()))
 					.estoque_minimo(BigDecimal.valueOf(dto.getEstoque_minimo()))
 					.peso(BigDecimal.valueOf(dto.getPeso()))
@@ -99,7 +99,7 @@ public class ProdutoResource {
 											.nome(dto.getNome())
 											.categoriaProduto(categoria)
 											.empresa(empresa)
-											.status(Status.ATIVO.toString())
+											.status(true)
 											.descricao(dto.getDescricao())		
 											.estoque_maximo(BigDecimal.valueOf(dto.getEstoque_maximo()))
 											.estoque_minimo(BigDecimal.valueOf(dto.getEstoque_minimo()))
@@ -168,10 +168,10 @@ public class ProdutoResource {
 				return service.obterPorId(id_produto).map(
 						  entity ->{
 							try {  
-								  if (entity.getStatus().equals(Status.ATIVO.toString()))
-									  service.ativarDesativar(Status.DESATIVADO,id_produto);
+								  if (entity.getStatus().equals(true))
+									  service.ativarDesativar(false,id_produto);
 								  else
-									  service.ativarDesativar(Status.ATIVO,id_produto);
+									  service.ativarDesativar(true,id_produto);
 								  
 								  return new ResponseEntity<>(HttpStatus.OK);
 							} catch (RegraNegocioException e) {

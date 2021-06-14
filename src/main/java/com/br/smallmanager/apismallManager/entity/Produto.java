@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,8 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.br.smallmanager.apismallManager.constants.Status;
-import com.fasterxml.jackson.annotation.JsonIgnore; 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,9 +40,10 @@ public class Produto {
 	
 	@Column(name = "nome")
 	private String nome; 
-	
+ 
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")
+	@JsonIgnore
 	private Empresa empresa;
 	
 	@Column(name = "descricao")
@@ -75,7 +77,7 @@ public class Produto {
 	private Boolean disponivel_entrega;
 	
 	@Column(name = "status")
-	private String status;
+	private Boolean status;
 	
 	@Column(name = "data_cadastro")
 	private Instant data_cadastro;
@@ -83,6 +85,10 @@ public class Produto {
 	@Column(name = "data_atualizacao")
 	private Instant data_atualizacao;
 	 
-	@OneToMany(mappedBy = "produto") 
+	@OneToMany(mappedBy = "produto" )  
 	private List<Fotos> fotos;
+	
+	@OneToMany(mappedBy = "produto" )  
+	private List<EventoAgenda> eventoAgenda;
+	 
 }

@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Random;
 import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
  
 import com.br.smallmanager.apismallManager.entity.Usuario;
@@ -32,13 +33,15 @@ public class UsuarioService {
 	
 	public Usuario salvarUsuario(Usuario usuario) {
 		validarEmail(usuario.getEmail());
-		usuario.setCodigo_confirmacao(codigoEmail());
-		try {
-			triggerMail(usuario);
-		} catch (MessagingException e) {
+		//usuario.setCodigo_confirmacao(codigoEmail());
+		//try {
+			//triggerMail(usuario);
+		//} catch (MessagingException e) {
 			 
-			e.printStackTrace();
-		} 
+		//	e.printStackTrace();
+		//} 
+		BCryptPasswordEncoder encoderPassword = new BCryptPasswordEncoder();
+		usuario.setSenha(encoderPassword.encode(usuario.getSenha())); 
 		return	repository.save(usuario);
 	  
 	}
@@ -54,15 +57,15 @@ public class UsuarioService {
 			}
 			repository.save(userUp);
 		}else
-			throw new RegraNegocioException("Usuário não encontrado.");
-		
+			throw new RegraNegocioException("Usuário não encontrado."); 
 	}
 	
 	public Usuario updateUsuario(Usuario usuario) {
 		
 		Objects.requireNonNull(usuario.getId());
 				usuario.setStatus_perfil(true);
-				
+				BCryptPasswordEncoder encoderPassword = new BCryptPasswordEncoder();
+				usuario.setSenha(encoderPassword.encode(usuario.getSenha())); 
 		return	repository.save(usuario);
 	  
 	} 

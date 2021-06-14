@@ -1,15 +1,20 @@
 package com.br.smallmanager.apismallManager.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table; 
-
 import com.br.smallmanager.apismallManager.dto.UsuarioStartDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,13 +81,18 @@ public class Usuario {
 	
 	@Column(name = "codigo_confirmacao")
 	private String codigo_confirmacao;
+	
+	@Column(name = "tipo_usuario")
+	private String tipo_usuario;
 	 
 	
 	public void DtoStartUsuarioToUsuario(UsuarioStartDTO usuario) {
 		setNome(usuario.getNome());
 		setEmail(usuario.getEmail());
-		setSenha(usuario.getSenha());
-		 
+		setSenha(usuario.getSenha()); 
 	}
-	
+	 
+	@OneToMany(mappedBy = "usuario" ) 
+	@JsonIgnore
+    private List<Empresa> empresa;
 }
