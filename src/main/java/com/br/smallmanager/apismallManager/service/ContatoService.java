@@ -26,7 +26,7 @@ public class ContatoService {
 		
 		Optional<Empresa> empresaExistente = empresaService.obterPorId(contato.getEmpresa().getId());
 		
-		if (!empresaExistente.isEmpty()) {
+		if (empresaExistente.isPresent() == true) {
 			contato.setEmpresa(empresaExistente.get() );
 			return repository.save(contato);
 				

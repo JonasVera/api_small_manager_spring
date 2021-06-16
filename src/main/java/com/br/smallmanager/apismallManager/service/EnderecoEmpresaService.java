@@ -26,7 +26,7 @@ public class EnderecoEmpresaService {
 		
 		Optional<Empresa> empresaExistente = empresaService.obterPorId(enderecoEmpresa.getEmpresa().getId());
 		System.out.println("ID END"+enderecoEmpresa.getEmpresa().getId());	
-		if (!empresaExistente.isEmpty()) {
+		if (!empresaExistente.isPresent() == true) {
 			enderecoEmpresa.setEmpresa(empresaExistente.get() );
 			
 			return repository.save(enderecoEmpresa);

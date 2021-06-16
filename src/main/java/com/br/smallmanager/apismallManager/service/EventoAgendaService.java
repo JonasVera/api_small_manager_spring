@@ -24,7 +24,7 @@ public class EventoAgendaService {
 		
 		Optional<Produto> produtoExistente = produtoService.obterPorId(evento.getProduto().getId());
 		
-		if (!produtoExistente.isEmpty()) {
+		if (!produtoExistente.isPresent() == true) {
 			
 			return repository.save(evento);
 				

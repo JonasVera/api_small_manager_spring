@@ -30,7 +30,7 @@ public class EmpresaService {
 		
 		Optional<Usuario> user = userService.obterPorId(usuario.getId());
 		
-		if (!user.isEmpty()) {
+		if (user.isPresent() == true) {
 				empresa.setUsuario(usuario);
 				return repository.save(empresa);
 		}else {
