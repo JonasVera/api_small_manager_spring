@@ -25,5 +25,9 @@ public class UsuarioStartDTO {
 	private String dataNascimento;
 	
 	private String contatoPessoal;
+	
+	private String bio;
+	
+	private String sexo;
   
 }

@@ -60,15 +60,26 @@ public class UsuarioResource implements Serializable{
 	
 	@PostMapping("cadastrar/")
 	public ResponseEntity<?> salvar ( @RequestBody UsuarioStartDTO dto) {
-		
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
+		Date data = new Date();
+		if(dto.getDataNascimento() != null) {
+			   try {
+				data = formato.parse(dto.getDataNascimento());
+			} catch (ParseException e) { 
+				e.printStackTrace();
+			}
+		}
 		Usuario usuario = Usuario.builder()
 				.nome(dto.getNome())
 				.email(dto.getEmail())
 				.senha(dto.getSenha())
+				.data_nascimento(data)
 				.sobrenome(dto.getSobrenome())
 				.data_cadastro(new Date())
 				.status_perfil(true)
 				.tipo_usuario(ProfileEnum.ROLE_CUSTUMER.toString())
+				.bio(dto.getBio())
+				.sexo(dto.getSexo())
 				.contato_pessoal(dto.getContatoPessoal())
 				.build();
 		try {
@@ -91,8 +102,8 @@ public class UsuarioResource implements Serializable{
 				  entity ->{
 					try {
 						
-						SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
-						 Date data = new Date();
+							SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
+							Date data = new Date();
 							if(usuarioEdit.getData_nascimento() != null) {
 								   data = formato.parse(usuarioEdit.getData_nascimento());
 							}
