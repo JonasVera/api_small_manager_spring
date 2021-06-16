@@ -23,17 +23,8 @@ public class EnderecoEmpresaService {
 
 	@Transactional 
 	public EnderecoEmpresa cadastrarEnderecoEmpresa(EnderecoEmpresa enderecoEmpresa) {
-		
-		Optional<Empresa> empresaExistente = empresaService.obterPorId(enderecoEmpresa.getEmpresa().getId());
-		System.out.println("ID END"+enderecoEmpresa.getEmpresa().getId());	
-		if (empresaExistente.isPresent() == true) {
-			enderecoEmpresa.setEmpresa(empresaExistente.get() );
-			
-			return repository.save(enderecoEmpresa);
-			
-		}else {
-			throw new RegraNegocioException("Não foi possivel cadastrar um contado, empresa não encontrada.");
-		} 
+		 return repository.save(enderecoEmpresa);
+			 
 	}
 	
 	@Transactional 
