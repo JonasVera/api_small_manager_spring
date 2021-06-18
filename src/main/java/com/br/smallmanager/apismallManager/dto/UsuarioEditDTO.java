@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UsuarioEditDTO {
 	 
-	private String id;	 
+	private Long id;	 
 	private String nome; 	 
 	private String sobrenome;	 
 	private String data_nascimento;	 

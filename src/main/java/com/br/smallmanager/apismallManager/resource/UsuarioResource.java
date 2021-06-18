@@ -98,7 +98,7 @@ public class UsuarioResource implements Serializable{
 				return ResponseEntity.badRequest().body("Não foi possivel atualizar o usuário.");
 		else
 			 
-		return service.obterPorId(Long.parseLong(usuarioEdit.getId())).map(
+		return service.obterPorId(usuarioEdit.getId()).map(
 				  entity ->{
 					try {
 						
@@ -112,7 +112,7 @@ public class UsuarioResource implements Serializable{
 						  			Usuario usuario = Usuario.builder()
 						  					.tipo_usuario(ProfileEnum.ROLE_CUSTUMER.toString())
 								  	.nome(usuarioEdit.getNome())
-									.id(Long.parseLong(usuarioEdit.getId()))
+									.id(usuarioEdit.getId())
 								  	.email(usuarioEdit.getEmail())
 									.sobrenome(usuarioEdit.getSobrenome())
 									.sexo(usuarioEdit.getSexo()) 
