@@ -56,7 +56,7 @@ public class EmpresaService {
 	@Transactional 
 	public List<Empresa> buscarPorNome(String nome) {
 		 
-		return repository.findByNome(nome);
+		return repository.findBySlung(nome);
 	}
 	
 	@Transactional 

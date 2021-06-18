@@ -44,6 +44,10 @@ public class Empresa {
 	
 	@Column(name = "categoria")
 	private String categoria;
+	
+	@Column(name = "slung")
+	private String slung; 
+	
 	@Column(name = "nome")
 	private String  nome;
 	@Column(name = "cnpj")

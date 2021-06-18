@@ -53,6 +53,7 @@ public class EmpresaResource {
 				.status_empresa(true)
 				.data_atualizacao(LocalDate.now())
 				.data_cadastro(LocalDate.now())
+				.slung(dto.getNome().toLowerCase().trim().replace(" ","_"))
 				.orcamento_cli(dto.getOrcamento_cli())
 				.agendamento_cli(dto.getAgendamento_cli())
 				.build();
