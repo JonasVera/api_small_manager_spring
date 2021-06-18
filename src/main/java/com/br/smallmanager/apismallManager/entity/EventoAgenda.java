@@ -53,4 +53,7 @@ public class EventoAgenda {
 	@Column(name = "status")
 	private String status;
 	
+	@Column(name = "email_cliente")
+	private String Contatocliente;
+	
 }

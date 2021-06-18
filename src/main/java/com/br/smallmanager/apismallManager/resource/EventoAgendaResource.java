@@ -47,6 +47,8 @@ public class EventoAgendaResource {
 				.titulo(dto.getTitulo())
 				.descricao(dto.getDescricao())
 				.status("PENDENTE")
+				 .hora(dto.getHoraInicio())
+				 .Contatocliente(dto.getEmail())
 				.build();
 		
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
