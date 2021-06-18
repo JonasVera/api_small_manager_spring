@@ -29,6 +29,8 @@ public class EmpresaDTO {
 	private String  bio_empresa;
 	 
 	private String  img_logotipo;
+	
+	private String  bannerColor;
  
 	private String status_empresa; 
     

@@ -50,6 +50,10 @@ public class Empresa {
 	
 	@Column(name = "nome")
 	private String  nome;
+	
+	@Column(name = "bannercolor")
+	private String  bannerColor;
+	
 	@Column(name = "cnpj")
 	private String  cnpj;
 	@Column(name = "bio_empresa")
