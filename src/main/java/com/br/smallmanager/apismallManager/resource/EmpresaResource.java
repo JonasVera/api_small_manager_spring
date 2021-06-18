@@ -181,6 +181,12 @@ public class EmpresaResource {
 		return ResponseEntity.ok(service.buscarPorUsuario(user.get()));
 		
 	}
+	@GetMapping("/nome/{empresa}")
+	public ResponseEntity<?> buscar( @PathVariable( "empresa") String empresa) {
+		   
+		return ResponseEntity.ok(service.buscarPorNome(empresa));
+		
+	}
 	
 	@PostMapping("/uploadLogoTipo/{id_empresa}")
 	public ResponseEntity<?> uploadFotoPerfilEmpresa(@PathVariable("id_empresa") Long id_empresa,@RequestParam MultipartFile file){

@@ -38,8 +38,8 @@ public class Empresa {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne( fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_usuario")
+	@ManyToOne
+	@JoinColumn(name = "id_usuario") 
 	private Usuario usuario;
 	
 	@Column(name = "categoria")
@@ -72,7 +72,7 @@ public class Empresa {
      @OneToMany(mappedBy = "empresa") 
 	 private List<Contato> contatos;
      
-     @OneToMany(mappedBy = "empresa") 
+     @OneToMany(mappedBy = "empresa")
 	 private List<EnderecoEmpresa> enderecoEmpresa;
      
      @OneToMany(mappedBy = "empresa") 

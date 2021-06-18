@@ -91,8 +91,8 @@ public class Usuario {
 		setEmail(usuario.getEmail());
 		setSenha(usuario.getSenha()); 
 	}
-	 
-	@OneToMany(mappedBy = "usuario" ) 
+	  
+	@OneToMany(mappedBy="usuario",cascade=CascadeType.ALL, orphanRemoval=true)
 	@JsonIgnore
     private List<Empresa> empresa;
 }
