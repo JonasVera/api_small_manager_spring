@@ -57,7 +57,19 @@ public class UsuarioResource implements Serializable{
 		}
 		 
 	}
-	
+	@PostMapping("mensagem/")
+	public ResponseEntity<?> enviarMensagem ( @RequestBody Mensagem mensagem) {
+		try {
+			try {
+				service.enviarMensagem(mensagem);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			return new   ResponseEntity<String>("Mensagem enviada",HttpStatus.OK);
+		}catch (RegraNegocioException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	@PostMapping("cadastrar/")
 	public ResponseEntity<?> salvar ( @RequestBody UsuarioStartDTO dto) {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 

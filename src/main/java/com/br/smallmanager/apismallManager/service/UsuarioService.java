@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import javax.mail.MessagingException;
+
+import com.br.smallmanager.apismallManager.entity.Mensagem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -176,7 +178,17 @@ public class UsuarioService {
 			 	 "Acesse o link para recuperar sua senha\nLink: https://localhost/api/usuario/"+textoId+"/"+usuarioEmail.getEmail(),
 		 	 "Recuperação de senha" );
 	}
-	 	
+	public void enviarMensagem(Mensagem mensagem) throws NoSuchAlgorithmException {
+
+		try {
+			serviceMail.mensagemEmail(mensagem.getEmail(),
+					mensagem.getMensagem(),
+					mensagem.getAssunto(),
+					mensagem);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
 	public Usuario findByEmail(String email) {
 		 
 		return repository.findByEmail(email);
