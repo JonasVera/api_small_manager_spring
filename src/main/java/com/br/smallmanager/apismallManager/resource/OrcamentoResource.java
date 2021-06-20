@@ -2,7 +2,8 @@ package com.br.smallmanager.apismallManager.resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date; 
+import java.util.Date;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,49 +14,42 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController; 
-import com.br.smallmanager.apismallManager.dto.AgendamentoDTO; 
+import org.springframework.web.bind.annotation.RestController;
+
+import com.br.smallmanager.apismallManager.dto.AgendamentoDTO;
+import com.br.smallmanager.apismallManager.dto.ContatoDTO;
+import com.br.smallmanager.apismallManager.dto.OrcamentoDTO;
+import com.br.smallmanager.apismallManager.entity.Contato;
+import com.br.smallmanager.apismallManager.entity.Empresa;
 import com.br.smallmanager.apismallManager.entity.EventoAgenda;
+import com.br.smallmanager.apismallManager.entity.Orcamento;
 import com.br.smallmanager.apismallManager.entity.Produto;
-import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException; 
+import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
+import com.br.smallmanager.apismallManager.service.ContatoService;
 import com.br.smallmanager.apismallManager.service.EmpresaService;
 import com.br.smallmanager.apismallManager.service.EventoAgendaService;
+import com.br.smallmanager.apismallManager.service.OrcamentoService;
  
 
 @RestController
-@RequestMapping("api/empresa/agenda")
+@RequestMapping("api/empresa/orcamento")
 @CrossOrigin(origins = "*")
-public class EventoAgendaResource {
+public class OrcamentoResource {
 
- 
 	@Autowired
-	private EventoAgendaService service; 
-	
-	@Autowired
-	private EmpresaService Empresaservice; 
+	private OrcamentoService service;  
 	
 	@PostMapping
-	public ResponseEntity<?> cadastrarEvento( @RequestBody AgendamentoDTO dto) {
+	public ResponseEntity<?> salvarOrcamento( @RequestBody OrcamentoDTO dto) {
 		
-		EventoAgenda eventoAgenda = EventoAgenda.builder()
-				.titulo(dto.getTitulo())
-				.descricao(dto.getDescricao())
-				.status("PENDENTE")
-				 .hora(dto.getHoraInicio())
-				 .Contatocliente(dto.getEmail())
-				.build();
-		
-		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
-		 Date data = new Date();
-			if(dto.getDataInicio() != null) {
-				   try {
-					data = formato.parse(dto.getDataInicio());
-				} catch (ParseException e) {
-					 
-					e.printStackTrace();
-				}
-			}
-			eventoAgenda.setData_inicio(data);
+		Orcamento eventoAgenda = Orcamento.builder()
+				 .titulo(dto.getTitulo())
+				 .descricao(dto.getDescricao())
+				 .status("PENDENTE")
+				 .data_solicitacao(new Date())
+				 .Contatocliente(dto.getEmail()) 
+				 .build();
+		 
 			
 		Produto produto = new Produto();
 		produto.setId(dto.getProduto());
@@ -66,30 +60,30 @@ public class EventoAgendaResource {
 			eventoAgenda.setProduto(produto);
 				  
 				try { 
-						EventoAgenda evento = service.cadastrarEvento(eventoAgenda);
-						return new ResponseEntity<EventoAgenda>(evento, HttpStatus.CREATED);
+					Orcamento evento = service.cadastrarOrcamento(eventoAgenda);
+						return new ResponseEntity<Orcamento>(evento, HttpStatus.CREATED);
 				}catch (RegraNegocioException e) {
 					return ResponseEntity.badRequest().body(e.getMessage());
 				}			 
 	}
 	
-	@DeleteMapping("/{id_evento}")
-	public ResponseEntity<?>  deleteEvento(@PathVariable( "id_evento") Long id_evento) {
+	@DeleteMapping("/{id_orcamento}")
+	public ResponseEntity<?>  deleteOrcamento(@PathVariable( "id_evento") Long id_orcamento) {
 		
-		EventoAgenda evento = EventoAgenda.builder()
-				.id(id_evento)
+		Orcamento orcamento = Orcamento.builder()
+				.id(id_orcamento)
 				.build(); 
-		 service.excluirEvento(evento);	
+		 service.excluirEvento(orcamento);	
 						 
 		 return new ResponseEntity<>(HttpStatus.OK);
 				 		 
 	} 
 	
-	@GetMapping("/agenda/{produto}")
+	@GetMapping("/{produto}")
 	public ResponseEntity<?> buscar( @PathVariable( "produto") Long produto) {
 		   Produto prod = new Produto();
 		  prod.setId(produto);
-		 return ResponseEntity.ok(service.buscarAgendaProduto(prod));
+		 return ResponseEntity.ok(service.buscarOrcamentoProduto(prod));
 		
 	}
 	
