@@ -85,4 +85,7 @@ public class Empresa {
      
      @OneToMany(mappedBy = "empresa") 
 	 private List<Produto> produto;
+     
+    @OneToMany(mappedBy = "empresa" )  
+ 	private List<Mensagem> mensagem;
 }

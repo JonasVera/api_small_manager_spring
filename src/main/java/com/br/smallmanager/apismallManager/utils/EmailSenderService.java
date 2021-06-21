@@ -60,7 +60,7 @@ public class EmailSenderService  {
 
     public void mensagemEmail(String toEmail,
                               String body,
-                              String subject,com.br.smallmanager.apismallManager.entity.Mensagem msg) throws MessagingException {
+                              String subject,com.br.smallmanager.apismallManager.dto.MensagemDto msg) throws MessagingException {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 

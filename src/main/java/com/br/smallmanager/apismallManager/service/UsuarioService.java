@@ -10,13 +10,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import javax.mail.MessagingException;
-
-import com.br.smallmanager.apismallManager.entity.Mensagem;
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
  
 import com.br.smallmanager.apismallManager.entity.Usuario;
+import com.br.smallmanager.apismallManager.dto.MensagemDto;
+import com.br.smallmanager.apismallManager.entity.Mensagem;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
 import com.br.smallmanager.apismallManager.repository.UsuarioRepository;
 import com.br.smallmanager.apismallManager.utils.EmailSenderService;
@@ -178,7 +179,7 @@ public class UsuarioService {
 			 	 "Acesse o link para recuperar sua senha\nLink: https://localhost/api/usuario/"+textoId+"/"+usuarioEmail.getEmail(),
 		 	 "Recuperação de senha" );
 	}
-	public void enviarMensagem(Mensagem mensagem) throws NoSuchAlgorithmException {
+	public void enviarMensagem(MensagemDto mensagem) throws NoSuchAlgorithmException {
 
 		try {
 			serviceMail.mensagemEmail(mensagem.getEmail(),

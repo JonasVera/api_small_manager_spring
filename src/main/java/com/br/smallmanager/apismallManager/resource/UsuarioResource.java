@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile; 
 import com.br.smallmanager.apismallManager.constants.ProfileEnum;
+import com.br.smallmanager.apismallManager.dto.MensagemDto;
 import com.br.smallmanager.apismallManager.dto.UsuarioEditDTO;
 import com.br.smallmanager.apismallManager.dto.UsuarioStartDTO;
 import com.br.smallmanager.apismallManager.entity.*;
@@ -54,22 +55,9 @@ public class UsuarioResource implements Serializable{
 			return new ResponseEntity<Usuario>(usuario.get(),HttpStatus.OK); 
 		}else {
 			return  new ResponseEntity<String>("Usuario não encontrado.",HttpStatus.BAD_REQUEST);
-		}
-		 
+		} 
 	}
-	@PostMapping("mensagem/")
-	public ResponseEntity<?> enviarMensagem ( @RequestBody Mensagem mensagem) {
-		try {
-			try {
-				service.enviarMensagem(mensagem);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
-			return new   ResponseEntity<String>("Mensagem enviada",HttpStatus.OK);
-		}catch (RegraNegocioException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
+ 
 	@PostMapping("cadastrar/")
 	public ResponseEntity<?> salvar ( @RequestBody UsuarioStartDTO dto) {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
