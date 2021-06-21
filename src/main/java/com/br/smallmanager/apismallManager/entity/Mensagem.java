@@ -48,8 +48,15 @@ public class Mensagem {
 	@Column(name = "data_envio")
 	private Date dataEnvio;
 	
+	@Column(name = "hora")
+	private String hora;
+	
+	@Column(name = "lido")
+	private boolean lido;
+	
 	@Column(name = "tipo")
 	private String tipo;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "empresa_id")

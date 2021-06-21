@@ -57,7 +57,10 @@ public class EmailSenderService  {
         System.out.println("Mail Send...");
 
     }
-
+    
+    public void capturaEmailClient () {
+    	
+    }
     public void mensagemEmail(String toEmail,
                               String body,
                               String subject,com.br.smallmanager.apismallManager.dto.MensagemDto msg) throws MessagingException {

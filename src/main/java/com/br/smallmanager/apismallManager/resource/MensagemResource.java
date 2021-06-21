@@ -1,6 +1,8 @@
 package com.br.smallmanager.apismallManager.resource;
   
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,14 +39,23 @@ public class MensagemResource {
 	public ResponseEntity<?> cadastrarMensagem ( @RequestBody MensagemDto dto) {
 		 Empresa emp = new Empresa();
 		 emp.setId(dto.getEmpresa());
+
+		 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		 Date hora = Calendar.getInstance().getTime(); 
+		 String dataFormatada = sdf.format(hora);
 		 
 		Mensagem mensagem = Mensagem.builder()
 				.nome(dto.getNome())
+				.lido(false)
+				.assunto(dto.getAssunto())
+				.hora(dataFormatada)
 				.mensagem(dto.getMensagem()) 
 				.tipo(dto.getTipo())
 				.email(dto.getEmail())
 				.empresa(emp)
+				
 				.dataEnvio(new Date())
+				
 				.build();
 		try {
 			Mensagem msg = service.cadastrarMensagem(mensagem);

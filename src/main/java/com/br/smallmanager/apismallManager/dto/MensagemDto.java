@@ -22,5 +22,6 @@ public class MensagemDto {
 	private Long empresa;
 	private String logo;
 	private String tipo;
-	
+	private String hora;
+	private boolean lido;
 }
