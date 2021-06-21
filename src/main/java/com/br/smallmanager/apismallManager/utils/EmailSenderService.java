@@ -510,7 +510,7 @@ public class EmailSenderService  {
         		+ "                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n"
         		+ "                      <tr>\n"
         		+ "                        <td align=\"center\" bgcolor=\"#EF8800\" style=\"border-radius: 6px;\">\n"
-        		+ "                          <a href=\""+body+" target=\"_blank\" style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color:black; text-decoration: none; border-radius: 6px;\">Redefinir minha senha</a>\n"
+        		+ "                          <a href=\""+body+"style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color:black; text-decoration: none; border-radius: 6px;\">Redefinir minha senha</a>\n"
         		+ "                        </td>\n"
         		+ "                      </tr>\n"
         		+ "                    </table>\n"
