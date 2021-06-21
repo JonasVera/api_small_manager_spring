@@ -222,14 +222,17 @@ public class UsuarioResource implements Serializable{
 	@PostMapping("emailRecuperarSenha/{email}")
 	public ResponseEntity<?>  emailRecupersenha (@PathVariable("email") String email ) throws MessagingException {
 		Usuario user = new Usuario();
-		user.setEmail(email);
-	 
-		try {
-			service.enviarEmailRecupercaoSenha(user);
-		} catch (NoSuchAlgorithmException e) {
-		  e.printStackTrace();
+		user.setEmail(email); 
+		if (user.getEmail().equals("") || user.getEmail().contains("@")== false)
+			return	new ResponseEntity<String>("E-mail invalido !",HttpStatus.BAD_REQUEST);
+		else { 
+			try {
+				service.enviarEmailRecupercaoSenha(user);
+			} catch (NoSuchAlgorithmException e) {
+			  e.printStackTrace();
+			} 
+			return new ResponseEntity<Usuario>(HttpStatus.CREATED);	 
 		} 
-		return new ResponseEntity<Usuario>(HttpStatus.CREATED);	 
 	}
 	
 	@PostMapping("RecuperarSenha/{id}/{email}")

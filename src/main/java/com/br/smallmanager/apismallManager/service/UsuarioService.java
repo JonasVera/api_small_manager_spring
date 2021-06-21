@@ -10,8 +10,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import javax.mail.MessagingException;
- 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
  
@@ -21,6 +23,7 @@ import com.br.smallmanager.apismallManager.entity.Mensagem;
 import com.br.smallmanager.apismallManager.exeptions.RegraNegocioException;
 import com.br.smallmanager.apismallManager.repository.UsuarioRepository;
 import com.br.smallmanager.apismallManager.utils.EmailSenderService;
+
  
 @Service
 public class UsuarioService {
@@ -33,6 +36,10 @@ public class UsuarioService {
 	 
 	 	@Autowired
 		private EmailSenderService serviceMail;
+
+	 	@Value("${url.front}")
+	 	private String url_front;
+	 	 
 	
 	public Usuario salvarUsuario(Usuario usuario) {
 		validarEmail(usuario.getEmail());
@@ -136,12 +143,46 @@ public class UsuarioService {
 				"Código de ativação da sua conta" );
 	}
 	
+	@Transactional
 	public void recuperarSenha(Usuario usuario) {
+		
+		
 		Objects.requireNonNull(usuario.getId());
+		if (usuario.getId() == null) {
+			 	throw new RegraNegocioException("Identificador do usuário está inválido !");
+		} 
+		
 		Usuario usuarioCadastrado = repository.findByEmail(usuario.getEmail());
+		
 		usuarioCadastrado.setSenha(usuario.getSenha());
 		
+		BCryptPasswordEncoder encoderPassword = new BCryptPasswordEncoder();
+		
+		usuarioCadastrado.setSenha(encoderPassword.encode(usuario.getSenha()));
+	 
+		 System.out.println("\n SENHA 2 "+usuarioCadastrado.getSenha());
+		
 		repository.save(usuarioCadastrado);		
+	}
+	 
+	
+	public void enviarEmailRecupercaoSenha(Usuario user) throws NoSuchAlgorithmException {
+		Usuario usuarioEmail = repository.findByEmail(user.getEmail());
+		
+		if (usuarioEmail == null) {
+			 throw new RegraNegocioException("E-mail inválido !");
+		} 
+		  
+		String textoId = encriptar(usuarioEmail.getId().toString()); 
+		try {
+			
+			serviceMail.sendEmailWithAttachment(user.getEmail(),
+					url_front+"?id="+textoId+"&email="+usuarioEmail.getEmail(),
+				 "Recuperação de senha" );
+		} catch (MessagingException e) {
+			 e.printStackTrace();
+		}
+
 	}
 	
 	public  String encriptar (String texto) {
@@ -166,19 +207,10 @@ public class UsuarioService {
 			 e.printStackTrace();
 		}
 	
-		System.out.println("\nPRINT = "+texto);
 		return texto;
 	}
 	
-	public void enviarEmailRecupercaoSenha(Usuario user) throws NoSuchAlgorithmException {
-		Usuario usuarioEmail = repository.findByEmail(user.getEmail());
-		
-		String textoId = encriptar(usuarioEmail.getId().toString());
-		
-		  serviceMail.sendSimpleEmail(user.getEmail(),
-			 	 "Acesse o link para recuperar sua senha\nLink: https://localhost/api/usuario/"+textoId+"/"+usuarioEmail.getEmail(),
-		 	 "Recuperação de senha" );
-	}
+	 
 	public void enviarMensagem(MensagemDto mensagem) throws NoSuchAlgorithmException {
 
 		try {

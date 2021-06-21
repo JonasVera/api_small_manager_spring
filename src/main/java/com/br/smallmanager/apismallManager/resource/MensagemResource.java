@@ -53,9 +53,7 @@ public class MensagemResource {
 				.tipo(dto.getTipo())
 				.email(dto.getEmail())
 				.empresa(emp)
-				
 				.dataEnvio(new Date())
-				
 				.build();
 		try {
 			Mensagem msg = service.cadastrarMensagem(mensagem);

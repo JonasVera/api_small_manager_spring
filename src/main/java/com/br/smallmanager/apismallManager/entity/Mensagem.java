@@ -33,6 +33,11 @@ public class Mensagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@ManyToOne
+	@JoinColumn(name = "empresa_id")
+	@JsonIgnore
+	private Empresa empresa;
+	
 	@Column(name = "nome")
 	private String nome;
 	
@@ -52,15 +57,11 @@ public class Mensagem {
 	private String hora;
 	
 	@Column(name = "lido")
-	private boolean lido;
+	private Boolean lido;
 	
 	@Column(name = "tipo")
 	private String tipo;
 	
-	
-	@ManyToOne
-	@JoinColumn(name = "empresa_id")
-	@JsonIgnore
-	private Empresa empresa;
+
  
 }
