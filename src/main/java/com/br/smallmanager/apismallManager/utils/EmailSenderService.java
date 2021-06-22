@@ -449,7 +449,7 @@ public class EmailSenderService  {
         		"          <tr>\r\n" + 
         		"            <td align=\"center\" valign=\"top\" style=\"padding: 36px 24px;\">\r\n" + 
         		"              <a href=\"https://sendgrid.com\"  style=\"display: inline-block;\">\r\n" + 
-        		"                <img src=\"https://small.s3.us-east-2.amazonaws.com/logo.svg\" alt=\"Logo\" border=\"0\" width=\"100\" style=\"display: block; width: 48px; max-width:270px; min-width:270px;\">\r\n" + 
+        		"                <img src=https://small.s3.us-east-2.amazonaws.com/logo.svg alt=\"Logo\" border=\"0\" width=\"100\" style=\"display: block; width: 48px; max-width:270px; min-width:270px;\">\r\n" + 
         		"              </a> \r\n" + 
         		"            </td>\r\n" + 
         		"          </tr>\r\n" + 
