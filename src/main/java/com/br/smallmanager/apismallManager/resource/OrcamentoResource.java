@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,7 @@ public class OrcamentoResource {
 		Produto produto = new Produto();
 		produto.setId(dto.getProduto());
 		if (produto.getId() == null)
-				return ResponseEntity.badRequest().body("Não foi possivel cadastrar o evento para este produto.");
+				return ResponseEntity.badRequest().body("Não foi possivel cadastrar um orcamento para este produto.");
 		else
 			 
 			eventoAgenda.setProduto(produto);
@@ -62,6 +63,31 @@ public class OrcamentoResource {
 				try { 
 					Orcamento evento = service.cadastrarOrcamento(eventoAgenda);
 						return new ResponseEntity<Orcamento>(evento, HttpStatus.CREATED);
+				}catch (RegraNegocioException e) {
+					return ResponseEntity.badRequest().body(e.getMessage());
+				}			 
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> update( @RequestBody OrcamentoDTO dto) {
+		
+		Orcamento orcamentoUpdate = Orcamento.builder()
+				 .titulo(dto.getTitulo())
+				 .descricao(dto.getDescricao())
+				 .status("respondido")
+				 .resposta(dto.getResposta())
+				 .data_solicitacao(new Date())
+				 .Contatocliente(dto.getEmail()) 
+				 .build();
+		Produto produto = new Produto();
+		produto.setId(dto.getProduto());
+		if (produto.getId() == null)
+				return ResponseEntity.badRequest().body("Não foi possivel cadastrar um orcamento para este produto.");
+		else
+			orcamentoUpdate.setProduto(produto);
+				try { 
+					Orcamento orcamento = service.alterarOrcamento(orcamentoUpdate);
+						return new ResponseEntity<Orcamento>(orcamento, HttpStatus.CREATED);
 				}catch (RegraNegocioException e) {
 					return ResponseEntity.badRequest().body(e.getMessage());
 				}			 

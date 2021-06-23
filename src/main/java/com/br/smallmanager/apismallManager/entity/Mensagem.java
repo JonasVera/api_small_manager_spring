@@ -61,7 +61,5 @@ public class Mensagem {
 	
 	@Column(name = "tipo")
 	private String tipo;
-	
-
- 
+	  
 }

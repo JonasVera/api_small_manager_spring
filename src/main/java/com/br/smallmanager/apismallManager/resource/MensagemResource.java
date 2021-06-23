@@ -71,6 +71,7 @@ public class MensagemResource {
 	public List<Mensagem> mensagens(@PathVariable( "id_empresa") Long id_empresa){
 		Empresa emp = new Empresa();
 		emp.setId(id_empresa);
+		
 		return service.mensagemPorEmpresa(emp);
 	}
 	 

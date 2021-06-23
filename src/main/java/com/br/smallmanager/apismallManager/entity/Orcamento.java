@@ -37,6 +37,9 @@ public class Orcamento {
 
     @Column(name = "status")
     private String status;
+    
+    @Column(name = "resposta")
+    private String resposta;
 
     @Column(name = "email_cliente")
     private String Contatocliente;

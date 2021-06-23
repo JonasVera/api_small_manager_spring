@@ -43,7 +43,7 @@ public class OrcamentoService {
 	} 
 	
 	@Transactional 
-	public void alterarEmpresa(Orcamento orcamento) {
-		repository.save(orcamento);
+	public Orcamento alterarOrcamento(Orcamento orcamento) {
+		return repository.save(orcamento);
 	}
 }

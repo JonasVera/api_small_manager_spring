@@ -19,5 +19,6 @@ public class OrcamentoDTO {
 	private String titulo;   
 	private String descricao;  
 	private String email;  
+	private String resposta;
 	 
 }
