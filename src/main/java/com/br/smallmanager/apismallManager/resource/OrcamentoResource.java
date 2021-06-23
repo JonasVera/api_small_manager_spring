@@ -71,18 +71,17 @@ public class OrcamentoResource {
 	@PutMapping
 	public ResponseEntity<?> update( @RequestBody OrcamentoDTO dto) {
 		
-		Orcamento orcamentoUpdate = Orcamento.builder()
-				 .titulo(dto.getTitulo())
-				 .id(dto.getId())
-				 .descricao(dto.getDescricao())
-				 .status("respondido")
-				 .resposta(dto.getResposta())
-				 .data_solicitacao(new Date())
-				 .Contatocliente(dto.getEmail()) 
+		Orcamento orcamentoUpdate = Orcamento.builder() 
+				 .id(dto.getId())  
 				 .build();
 		Produto produto = new Produto();
 		produto.setId(dto.getProduto());
+		 orcamentoUpdate = service.buscarPorId(orcamentoUpdate).get();
+		 orcamentoUpdate.setResposta(dto.getResposta());
+		 orcamentoUpdate.setStatus("Respondido");
+		  
 		if (produto.getId() == null)
+			
 				return ResponseEntity.badRequest().body("Não foi possivel cadastrar um orcamento para este produto.");
 		else
 			orcamentoUpdate.setProduto(produto);
