@@ -41,9 +41,13 @@ public class OrcamentoService {
 	public void excluirEvento(Orcamento orcamento) { 
 	    repository.delete(orcamento); 
 	} 
-	
-	@Transactional 
+	 
 	public Orcamento alterarOrcamento(Orcamento orcamento) {
-		return repository.save(orcamento);
+		if(orcamento.getId() != null || orcamento.getId() != 0) {
+			return repository.save(orcamento);
+		}else {
+			throw new RegraNegocioException("Não foi possivel cadastrar um orcamento, orçamento não encontrado.");
+		}
+		
 	}
 }
