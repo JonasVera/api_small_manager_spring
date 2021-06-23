@@ -73,6 +73,7 @@ public class OrcamentoResource {
 		
 		Orcamento orcamentoUpdate = Orcamento.builder()
 				 .titulo(dto.getTitulo())
+				 .id(dto.getId())
 				 .descricao(dto.getDescricao())
 				 .status("respondido")
 				 .resposta(dto.getResposta())
