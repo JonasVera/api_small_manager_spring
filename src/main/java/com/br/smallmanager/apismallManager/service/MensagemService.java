@@ -64,6 +64,11 @@ public class MensagemService {
 	public List<Mensagem> mensagemPorEmpresa(Empresa empresa) {
 		return repository.findByEmpresa(empresa);
 	}
+	
+	public List<Mensagem> conversaTipo(Mensagem msg) {
+		return repository.findByEmailAndTipo(msg);
+	}
+	
 	public void validaMensagem(Mensagem Mensagem) {
 		 
 		if (repository.findById(Mensagem.getId()).isPresent() == false) {

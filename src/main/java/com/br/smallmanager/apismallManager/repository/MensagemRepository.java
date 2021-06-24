@@ -11,4 +11,6 @@ import java.util.List;
 public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
 	
  List<Mensagem> findByEmpresa(Empresa empresa);
+  
+ List<Mensagem> findByEmailAndTipo(Mensagem msg);
 }
