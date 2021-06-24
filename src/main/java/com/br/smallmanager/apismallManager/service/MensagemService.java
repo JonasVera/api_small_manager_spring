@@ -64,9 +64,9 @@ public class MensagemService {
 	public List<Mensagem> mensagemPorEmpresa(Empresa empresa) {
 		return repository.findByEmpresa(empresa);
 	}
-	
+	@Transactional
 	public List<Mensagem> conversaTipo(Mensagem msg) {
-		return repository.findByEmailAndTipo(msg);
+		return repository.findByEmailAndTipo(msg.getEmail(),msg.getTipo());
 	}
 	
 	public void validaMensagem(Mensagem Mensagem) {

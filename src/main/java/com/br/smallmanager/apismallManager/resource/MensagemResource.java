@@ -87,6 +87,14 @@ public class MensagemResource {
 		
 		return service.mensagemPorEmpresa(emp);
 	}
+	
+	@GetMapping("conversa/{email}/{tipo}")
+	public List<Mensagem> mensagens(@PathVariable( "email") String email, @PathVariable( "tipo") String tipo){
+		 Mensagem msg = new Mensagem();
+		 msg.setEmail(email);
+		 msg.setTipo(tipo); 
+		return service.conversaTipo(msg);
+	}
 	 
 	@DeleteMapping("/excluirMensagem/{id_mensagem}")
 	public ResponseEntity<?>  deleteCategoria ( @PathVariable( "id_categoria") Long id_mensagem) {

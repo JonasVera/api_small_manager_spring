@@ -227,7 +227,7 @@ public class EmailSenderService  {
         		"        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"max-width: 600px;\">\r\n" + 
         		"          <tr>\r\n" + 
         		"            <td align=\"left\" bgcolor=\"#ffffff\" style=\"padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #aa00ff;\">\r\n" + 
-        		"              <h4 style=\"margin: 0; color=#ffffff ; font-size: 20px; font-weight: 700; letter-spacing: -1px; line-height: 48px;\">"+msg.getNome()+" Enviou uma mensagem</h4>\r\n" + 
+        		"              <h1 style=\"margin: 0; color=#ffffff ; font-size: 20px; font-weight: 700; letter-spacing: -1px; line-height: 48px;\">"+msg.getNome()+" Enviou uma mensagem</h1>\r\n" + 
         		"            </td>\r\n" + 
         		"          </tr>\r\n" + 
         		"        </table>\r\n" + 
