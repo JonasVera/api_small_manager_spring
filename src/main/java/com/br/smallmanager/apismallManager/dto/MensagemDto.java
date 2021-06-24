@@ -23,5 +23,5 @@ public class MensagemDto {
 	private String logo;
 	private String tipo;
 	private String hora;
-	private boolean lido;
+	private boolean lido; 
 }

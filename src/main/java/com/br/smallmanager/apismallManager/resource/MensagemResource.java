@@ -67,6 +67,19 @@ public class MensagemResource {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+	@PostMapping("email")
+	public ResponseEntity<?> enviaEmail ( @RequestBody MensagemDto dto) { 
+		try { 
+			try {
+				serviceUser.enviarMensagem(dto);
+			} catch (NoSuchAlgorithmException e) { 
+				e.printStackTrace();
+			}
+			return new ResponseEntity<MensagemDto>(dto, HttpStatus.CREATED);
+		}catch (RegraNegocioException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	@GetMapping("listar/{id_empresa}")
 	public List<Mensagem> mensagens(@PathVariable( "id_empresa") Long id_empresa){
 		Empresa emp = new Empresa();

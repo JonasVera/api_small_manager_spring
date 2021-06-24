@@ -46,7 +46,7 @@ public class OrcamentoService {
 		if(orcamento.getId() != null || orcamento.getId() != 0) {
 			return repository.save(orcamento);
 		}else {
-			throw new RegraNegocioException("Não foi possivel cadastrar um orcamento, orçamento não encontrado.");
+			throw new RegraNegocioException("Não foi possivel cadastrar um orcamento, produto não encontrada.");
 		}
 		
 	}
