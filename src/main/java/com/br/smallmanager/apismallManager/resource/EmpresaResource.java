@@ -82,6 +82,7 @@ public class EmpresaResource {
 									Empresa empresa = Empresa.builder()
 											.id(dto.getId())
 										  	.nome(dto.getNome())
+										  	 
 											.categoria(dto.getCategoria())
 											.cnpj(dto.getCnpj())
 											.bio_empresa(dto.getBio_empresa())
