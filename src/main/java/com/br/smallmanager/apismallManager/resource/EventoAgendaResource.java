@@ -87,7 +87,7 @@ public class EventoAgendaResource {
 	
 	@PostMapping("status/{id_evento}/{status}")
 	public ResponseEntity<?>  alterarStatus(@PathVariable( "id_evento") Long id_evento,
-			@PathVariable( "id_evento") String status) {
+			@PathVariable( "status") String status) {
 		
 		EventoAgenda evento = EventoAgenda.builder()
 				.id(id_evento) 
