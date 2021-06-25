@@ -85,6 +85,22 @@ public class EventoAgendaResource {
 				 		 
 	} 
 	
+	@PostMapping("status/{id_evento}/{status}")
+	public ResponseEntity<?>  alterarStatus(@PathVariable( "id_evento") Long id_evento,
+			@PathVariable( "id_evento") String status) {
+		
+		EventoAgenda evento = EventoAgenda.builder()
+				.id(id_evento) 
+				.build(); 
+		evento = service.buscarPorId(evento).get();
+		evento.setStatus(status);
+		
+		 service.alterarEmpresa(evento);
+						 
+		 return new ResponseEntity<>(HttpStatus.OK);
+				 		 
+	} 
+	
 	@GetMapping("/agenda/{produto}")
 	public ResponseEntity<?> buscar( @PathVariable( "produto") Long produto) {
 		   Produto prod = new Produto();
